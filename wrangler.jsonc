@@ -1,6 +1,6 @@
 {
   "main": ".open-next/worker.js",
-  "name": "atvirastinklas",
+  "name": "atviras-tinklas",
   "compatibility_date": "2025-08-04",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
