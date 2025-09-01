@@ -18,8 +18,14 @@ export default async function Page(props: {
 
   const MDXContent = page.data.body;
 
+  // TODO: Move hardcoded values to env file.
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage toc={page.data.toc} full={page.data.full} editOnGithub={{
+      path: `content/docs/${page.path}`,
+      sha: "main",
+      owner: "atvirastinklas",
+      repo: "web",
+    }}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
