@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "ignore": [
+      "*-lock.json",
+      "node_modules",
+      ".turbo",
+      "build",
+      "dist",
+      ".vscode",
+      ".next",
+      ".source"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "noNonNullAssertion": "off"
+      }
+    }
+  }
+}
