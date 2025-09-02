@@ -1,7 +1,8 @@
 import { WorldMap } from "./world-map";
 
 export default async function Page() {
-    const response = await fetch("https://cdn.atvirastinklas.lt/nodes.json")
+    // TODO: Refactor to use API instead.
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CDN_URL}/nodes.json`)
     const nodes = await response.json();
 
     return (

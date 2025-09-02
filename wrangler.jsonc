@@ -6,5 +6,11 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_GITHUB_OWNER": "atvirastinklas",
+    "NEXT_PUBLIC_GITHUB_REPO": "web",
+    "NEXT_PUBLIC_DOMAIN": "atvirastinklas.lt",
+    "NEXT_PUBLIC_CDN_URL": "https://cdn.atvirastinklas.lt"
   }
 }
