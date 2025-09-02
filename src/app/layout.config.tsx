@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { SiFacebook } from "@icons-pack/react-simple-icons";
 
-export const baseOptions: BaseLayoutProps = {
+export const baseOptions = {
   // TODO: Move hardcoded values to env file.
   githubUrl: "https://github.com/atvirastinklas/web",
   nav: {
@@ -30,4 +30,4 @@ export const baseOptions: BaseLayoutProps = {
       url: "https://www.facebook.com/groups/1122509422249414",
     },
   ],
-};
+} satisfies BaseLayoutProps;

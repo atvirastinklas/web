@@ -1,13 +1,56 @@
 ---
-title: Hello World
-description: Your first document
+title: Pirmieji žingsniai
+description: Sužinok, kaip pradėti naudotis tinklu - nuo pirmojo įrenginio paruošimo iki prisijungimo.
+icon: Album
 ---
 
-Welcome to the docs hosted on Cloudflare! You can start writing documents in `/content/docs`.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-## What is Next?
+<Callout title="Dėmesio - yra pavojus sugadinti įrenginį" type="warning">
+  Visada įjunkite įrenginį tik su tinkamai prijungta antena - taip apsaugosite RF modulį.
+</Callout>
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.vercel.app" />
-</Cards>
+<Steps>
+<Step>
+### Pagrindiniai reikalavimai
+
+Prieš pradedant reikia turėti:
+- Meshtastic&reg; palaikomą įrenginį (žr. [suderinamų įrenginių sąrašą](https://meshtastic.org/docs/hardware/devices/))
+- Kompiuterį (Windows, macOS arba Linux)
+- USB laidą
+- Naršyklę kuri palaiko Serial API (pvz., Google Chrome)
+
+</Step>
+<Step>
+### Programinės įrangos diegimas
+
+1. Prijunkite įrenginį prie kompiuterio per USB.
+
+2. Atidarykite **Google Chrome** naršyklę ir apsilankykite: [flasher.meshtastic.org](https://flasher.meshtastic.org).
+
+3. Spauskite „Connect“, pasirinkite įrenginį ir naujausią beta versiją. 
+Pirmojo įrašymo metu rekomenduojame pasirinkti režimą „Full Erase“. Vėlesniems atnaujinimams galima naudoti įprastą įrašymą.
+
+4. Sekite likusius žingsnius tinklapyje iki pabaigos.
+
+
+</Step>
+<Step>
+### Programėlės diegimas
+
+Įdiekite programėlę savo telefone:
+- [Android](https://play.google.com/store/apps/details?id=com.geeksville.mesh)
+- [iOS](https://apps.apple.com/pt/app/meshtastic/id1586432531)
+
+Atidarius programėlę, prisijunkite prie savo įrenginio per Bluetooth.
+
+</Step>
+<Step>
+### Pradiniai nustatymai
+
+- 🌍 Regionas: „European Union 868Mhz“
+- 📶 RF režimas: „Long Range - Fast“
+- 👥 Įrenginio rolė: _Client_, _Client Mute_
+
+</Step>
+</Steps>
