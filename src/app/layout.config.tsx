@@ -16,7 +16,7 @@ export const baseOptions: BaseLayoutProps = {
           <title>Logo</title>
           <circle cx={12} cy={12} r={12} fill="currentColor" />
         </svg>
-        Atviras Kodas
+        Atviras Tinklas
       </>
     ),
   },
