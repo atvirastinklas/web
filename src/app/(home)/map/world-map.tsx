@@ -4,16 +4,14 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Pin } from './pin';
 
 export interface MeshNode {
-    id: string;
+    nodeNum: number;
     longName: string;
     shortName: string;
-    hwMode: string;
-    position: {
-        longitude: number;
-        latitude: number;
-        altitude?: number;
-    }
-    lastHeard: string;
+    hwModel: string;
+    longitude: number;
+    latitude: number;
+    precisionInMeters: number;
+    lastUpdate: string;
 }
 
 interface Props {
@@ -36,7 +34,7 @@ export const WorldMap = (props: Props) => {
             <ScaleControl />
 
             {props.nodes.map((node) => (
-                <Marker key={node.id} longitude={node.position.longitude} latitude={node.position.latitude}>
+                <Marker key={node.nodeNum} longitude={node.longitude} latitude={node.latitude}>
                     <Pin name={node.longName} />
                 </Marker>
             ))}
