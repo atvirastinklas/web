@@ -2,7 +2,9 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import { SiFacebook } from "@icons-pack/react-simple-icons";
 
 export const baseOptions = {
-  githubUrl: `https://github.com/${process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ""}/${process.env.NEXT_PUBLIC_GITHUB_REPO ?? ""}`,
+  githubUrl: `https://github.com/${
+    process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ""
+  }/${process.env.NEXT_PUBLIC_GITHUB_REPO ?? ""}`,
   nav: {
     title: (
       <>
