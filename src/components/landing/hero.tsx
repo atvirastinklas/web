@@ -28,21 +28,16 @@ export const Hero = () => {
             >
               Prisijunk prie tinklo <ArrowUpRight className="!h-5 !w-5" />
             </Link>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto text-base shadow-none disabled:pointer-events-auto cursor-not-allowed"
-                  disabled
-                >
-                  <MapIcon className="!h-5 !w-5" /> Žemėlapis
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Kuriama</p>
-              </TooltipContent>
-            </Tooltip>
+            <Link
+              href="/map"
+              className={buttonVariants({
+                size: "lg",
+                className: "w-full sm:w-auto text-base",
+                variant: "outline",
+              })}
+            >
+              <MapIcon className="!h-5 !w-5" /> Žemėlapis
+            </Link>
           </div>
         </div>
         <div className="relative lg:max-w-lg xl:max-w-xl w-full bg-accent rounded-xl aspect-square">

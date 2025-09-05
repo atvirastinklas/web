@@ -14,6 +14,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/docs",
           on: "nav",
         },
+        {
+          type: "main",
+          text: "Žemėlapis",
+          url: "/map",
+          on: "all",
+        },
       ]}
     >
       {children}

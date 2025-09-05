@@ -23,7 +23,7 @@ export const WorldMap = () => {
       }}
       style={{ width: "100%", height: "100%" }}
       mapStyle={`https://basemaps.cartocdn.com/gl/${
-        theme === "dark" ? "dark-matter-gl-style" : "voyager-gl-style"
+        theme === "light" ? "voyager-gl-style" : "dark-matter-gl-style"
       }/style.json`}
     >
       <GeolocateControl position="top-left" />
