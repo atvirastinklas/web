@@ -3,6 +3,31 @@ import { useEffect, useState } from "react";
 import { useMap, Popup, type MapGeoJSONFeature } from "react-map-gl/maplibre";
 import { MarkerPrecisionCircle } from "./marker-precision-circle";
 import { XIcon } from "lucide-react";
+import { intlFormatDistance, intlFormat } from "date-fns";
+import type { MeshNode } from "./contracts";
+
+const HumanReadableDuration = (props: { date: Date | null }) => {
+  if (props.date == null) {
+    return <>-</>;
+  }
+
+  return (
+    <span
+      title={intlFormat(
+        props.date,
+        {
+          dateStyle: "medium",
+          timeStyle: "medium",
+        },
+        { locale: "lt" },
+      )}
+    >
+      {intlFormatDistance(props.date, new Date(), {
+        locale: "lt",
+      })}
+    </span>
+  );
+};
 
 interface Props {
   layer: string;
@@ -12,15 +37,12 @@ export const MarkerPopup = (props: Props) => {
   const { current: map } = useMap();
   const [popupInfo, setPopupInfo] = useState<MapGeoJSONFeature | null>(null);
 
-  console.log(map, props.layer, popupInfo);
-
   useEffect(() => {
     if (map == null) {
       return;
     }
 
     const subscription = map.on("click", props.layer, (event) => {
-      console.log("CLICK", event.features?.[0]);
       setPopupInfo(event.features?.[0] || null);
     });
 
@@ -38,6 +60,12 @@ export const MarkerPopup = (props: Props) => {
   if (point == null) {
     return null;
   }
+
+  const properties: Partial<MeshNode> = popupInfo.properties ?? {};
+
+  const lastUpdated = properties.lastUpdated
+    ? new Date(properties.lastUpdated)
+    : null;
 
   return (
     <>
@@ -57,44 +85,34 @@ export const MarkerPopup = (props: Props) => {
         </div>
         <div className="bg-card text-card-foreground gap-6 rounded-xl border py-4 px-4 shadow-sm flex flex-col">
           <h1 className="font-bold text-lg">
-            {popupInfo.properties?.longName ?? "Unknown"} (
-            {popupInfo.properties?.shortName ?? ""})
+            {properties.longName ?? "Unknown"} ({properties.shortName ?? ""})
           </h1>
           <div className="flex flex-col gap-1">
-            <p className="text-sm">
-              Node: {popupInfo.properties?.nodeNum ?? "-"}
-            </p>
+            <p className="text-sm">Node: {properties.nodeNum ?? "-"}</p>
             <p className="text-sm">
               Node ID:{" "}
-              {popupInfo.properties?.nodeNum != null
-                ? nodeNumToId(popupInfo.properties.nodeNum)
+              {properties.nodeNum != null
+                ? nodeNumToId(properties.nodeNum)
                 : "-"}
             </p>
-            <p className="text-sm">
-              Įranga: {popupInfo.properties?.hwModel ?? "-"}
-            </p>
+            <p className="text-sm">Įranga: {properties.hwModel ?? "-"}</p>
             <p className="text-sm">
               Pozicijos tikslumas:{" "}
-              {popupInfo.properties?.precisionInMeters
-                ? `${Number(popupInfo.properties.precisionInMeters).toFixed(
-                    2,
-                  )}m`
+              {properties.accuracy
+                ? `${Number(properties.accuracy).toFixed(2)}m`
                 : "-"}
             </p>
             <p className="text-sm">
-              Atnaujinta:{" "}
-              {popupInfo.properties?.lastUpdate
-                ? new Date(popupInfo.properties.lastUpdate).toLocaleString()
-                : "-"}
+              Atnaujinta: <HumanReadableDuration date={lastUpdated} />
             </p>
           </div>
         </div>
       </Popup>
-      {popupInfo.properties?.precisionInMeters == null ? null : (
+      {properties.accuracy == null ? null : (
         <MarkerPrecisionCircle
           layerId="precision-circle"
           center={point as [number, number]}
-          radius={popupInfo.properties.precisionInMeters}
+          radius={properties.accuracy}
         />
       )}
     </>

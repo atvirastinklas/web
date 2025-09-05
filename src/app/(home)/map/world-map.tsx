@@ -12,17 +12,6 @@ import { useTheme } from "next-themes";
 
 import "./maplibre.css";
 
-export interface MeshNode {
-  nodeNum: number;
-  longName: string;
-  shortName: string;
-  hwModel: string;
-  longitude: number;
-  latitude: number;
-  precisionInMeters: number;
-  lastUpdate: string;
-}
-
 export const WorldMap = () => {
   const { theme } = useTheme();
 
@@ -45,7 +34,7 @@ export const WorldMap = () => {
       <Source
         id="nodes"
         type="geojson"
-        data="https://atvirastinklas.lt/nodes.json"
+        data="https://api.atvirastinklas.lt/map/nodes.json"
       >
         <Layer
           id="points"
