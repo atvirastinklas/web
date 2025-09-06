@@ -10,9 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  return (
-    <main className="h-full w-full">
-      <WorldMap />
-    </main>
-  );
+  return <WorldMap />;
 }

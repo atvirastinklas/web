@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import { useMap, Popup, type MapGeoJSONFeature } from "react-map-gl/maplibre";
 import { MarkerPrecisionCircle } from "./marker-precision-circle";
 import { XIcon } from "lucide-react";
-import { intlFormatDistance, intlFormat } from "date-fns";
+import { intlFormatDistance, intlFormat, set } from "date-fns";
 import type { MeshNode } from "./contracts";
+import { createPortal } from "react-dom";
+import { Button } from "@/components/ui/button";
+import { NodeSidebar } from "./node-sidebar";
 
 const HumanReadableDuration = (props: { date: Date | null }) => {
   if (props.date == null) {
@@ -29,13 +32,21 @@ const HumanReadableDuration = (props: { date: Date | null }) => {
   );
 };
 
+interface SelectedNode {
+  point: [number, number];
+  properties: Partial<MeshNode>;
+  lastUpdated: Date | null;
+}
+
 interface Props {
   layer: string;
+  sidebarId: string;
 }
 
 export const MarkerPopup = (props: Props) => {
   const { current: map } = useMap();
-  const [popupInfo, setPopupInfo] = useState<MapGeoJSONFeature | null>(null);
+  const [selectedNode, setPopupInfo] = useState<SelectedNode | null>(null);
+  const [moreInfo, setMoreInfo] = useState(false);
 
   useEffect(() => {
     if (map == null) {
@@ -43,7 +54,22 @@ export const MarkerPopup = (props: Props) => {
     }
 
     const subscription = map.on("click", props.layer, (event) => {
-      setPopupInfo(event.features?.[0] || null);
+      const firstFeature = event.features?.[0];
+      if (firstFeature == null) {
+        return;
+      }
+
+      if (firstFeature.geometry.type !== "Point") {
+        return;
+      }
+
+      setPopupInfo({
+        point: firstFeature.geometry.coordinates as [number, number],
+        properties: firstFeature.properties as Partial<MeshNode>,
+        lastUpdated: firstFeature.properties?.lastUpdated
+          ? new Date(firstFeature.properties.lastUpdated)
+          : null,
+      });
     });
 
     return () => {
@@ -51,28 +77,16 @@ export const MarkerPopup = (props: Props) => {
     };
   }, [map, props.layer]);
 
-  if (popupInfo == null) {
+  if (selectedNode == null) {
     return null;
   }
-
-  const point =
-    popupInfo.geometry.type === "Point" ? popupInfo.geometry.coordinates : null;
-  if (point == null) {
-    return null;
-  }
-
-  const properties: Partial<MeshNode> = popupInfo.properties ?? {};
-
-  const lastUpdated = properties.lastUpdated
-    ? new Date(properties.lastUpdated)
-    : null;
 
   return (
     <>
       <Popup
-        key={popupInfo.properties?.nodeNum}
-        latitude={point[1]}
-        longitude={point[0]}
+        key={selectedNode.properties?.nodeNum}
+        latitude={selectedNode.point[1]}
+        longitude={selectedNode.point[0]}
         closeOnClick={false}
         onClose={() => setPopupInfo(null)}
         closeButton={false}
@@ -85,36 +99,59 @@ export const MarkerPopup = (props: Props) => {
         </div>
         <div className="bg-card text-card-foreground gap-6 rounded-xl border py-4 px-4 shadow-sm flex flex-col">
           <h1 className="font-bold text-lg">
-            {properties.longName ?? "Unknown"} ({properties.shortName ?? ""})
+            {selectedNode.properties.longName ?? "Unknown"} (
+            {selectedNode.properties.shortName ?? ""})
           </h1>
           <div className="flex flex-col gap-1">
-            <p className="text-sm">Node: {properties.nodeNum ?? "-"}</p>
+            <p className="text-sm">
+              Node: {selectedNode.properties.nodeNum ?? "-"}
+            </p>
             <p className="text-sm">
               Node ID:{" "}
-              {properties.nodeNum != null
-                ? nodeNumToId(properties.nodeNum)
+              {selectedNode.properties.nodeNum != null
+                ? nodeNumToId(selectedNode.properties.nodeNum)
                 : "-"}
             </p>
-            <p className="text-sm">Įranga: {properties.hwModel ?? "-"}</p>
+            <p className="text-sm">
+              Įranga: {selectedNode.properties.hwModel ?? "-"}
+            </p>
             <p className="text-sm">
               Pozicijos tikslumas:{" "}
-              {properties.accuracy
-                ? `${Number(properties.accuracy).toFixed(2)}m`
+              {selectedNode.properties.accuracy
+                ? `${Number(selectedNode.properties.accuracy).toFixed(2)}m`
                 : "-"}
             </p>
             <p className="text-sm">
-              Atnaujinta: <HumanReadableDuration date={lastUpdated} />
+              Atnaujinta:{" "}
+              <HumanReadableDuration date={selectedNode.lastUpdated} />
             </p>
+            <Button
+              variant="outline"
+              className="mt-2"
+              onClick={() => setMoreInfo(!moreInfo)}
+            >
+              Rodyti daugiau
+            </Button>
           </div>
         </div>
       </Popup>
-      {properties.accuracy == null ? null : (
+      {selectedNode.properties.accuracy == null ? null : (
         <MarkerPrecisionCircle
           layerId="precision-circle"
-          center={point as [number, number]}
-          radius={properties.accuracy}
+          center={selectedNode.point}
+          radius={selectedNode.properties.accuracy}
         />
       )}
+      {!moreInfo
+        ? null
+        : createPortal(
+            <NodeSidebar
+              nodeData={selectedNode.properties}
+              position={selectedNode.point}
+              onClose={() => setMoreInfo(false)}
+            />,
+            document.getElementById(props.sidebarId)!,
+          )}
     </>
   );
 };
