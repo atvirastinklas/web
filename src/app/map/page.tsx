@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MeshMap } from "./mesh-map";
+import NodeOverview from "./node-overview";
 
 export const metadata: Metadata = {
   title: "Žemėlapis | Atviras Tinklas",
@@ -17,5 +18,10 @@ export default async function Page(props: Props) {
   const { searchParams } = props;
   const { node } = await searchParams;
 
-  return <MeshMap nodeNum={node ? Number.parseInt(node) : null} />;
+  return (
+    <>
+      <MeshMap nodeNum={node ? Number.parseInt(node) : null} />
+      {node == null ? null : <NodeOverview node={node} />}
+    </>
+  );
 }

@@ -10,7 +10,7 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import type { MeshNode } from "../contracts";
+import type { MeshNode } from "./contracts";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -22,16 +22,11 @@ const formatAccuracy = (accuracy: number) => {
 };
 
 interface Props {
-  searchParams: Promise<{ node?: string }>;
+  node: string;
 }
 
-export default async function Page(props: Props) {
-  const { node } = await props.searchParams;
-
-  if (node == null) {
-    return null;
-  }
-
+export default async function NodeOverview(props: Props) {
+  const { node } = props;
   const response = await fetch(`https://api.atvirastinklas.lt/node/${node}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
