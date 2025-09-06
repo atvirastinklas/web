@@ -7,6 +7,8 @@ export const metadata: Metadata = {
     "Mes siekiame sukurti atvirą ryšio tinklą, kuriuo galėtų naudotis visi - tiek nelaimės atveju, tiek paprastam bendravimui. Nepriklausoma sistema, veikianti be interneto ir mobiliojo ryšio.",
 };
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   searchParams: Promise<{ node?: string }>;
 }

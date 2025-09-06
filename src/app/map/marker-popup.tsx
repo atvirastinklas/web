@@ -113,8 +113,6 @@ export const MarkerPopup = (props: Props) => {
     };
   }, [map, props.layers, props.sourceId]);
 
-  console.log(nodes);
-
   if (nodes == null) {
     return null;
   }
