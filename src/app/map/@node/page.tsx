@@ -14,6 +14,8 @@ import type { MeshNode } from "../contracts";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
 };
@@ -44,7 +46,7 @@ export default async function Page(props: Props) {
     <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
       <div className="absolute top-2 right-2">
         <Button type="button" variant="ghost" asChild>
-          <Link href="/map">
+          <Link href="/map" replace={true}>
             <XIcon />
           </Link>
         </Button>
