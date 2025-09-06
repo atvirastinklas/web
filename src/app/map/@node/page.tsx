@@ -13,6 +13,7 @@ import {
 import type { MeshNode } from "../contracts";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -36,8 +37,7 @@ export default async function Page(props: Props) {
     headers: { "Content-Type": "application/json" },
   });
   if (!response.ok) {
-    console.error("Failed to fetch node data", response.statusText);
-    return null;
+    notFound();
   }
 
   const nodeData = (await response.json()) as MeshNode;
@@ -46,7 +46,7 @@ export default async function Page(props: Props) {
     <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
       <div className="absolute top-2 right-2">
         <Button type="button" variant="ghost" asChild>
-          <Link href="/map" replace={true}>
+          <Link href="/map">
             <XIcon />
           </Link>
         </Button>
