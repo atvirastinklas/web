@@ -46,7 +46,7 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
                   <Badge variant="default">
                     {" "}
                     <MessageCircleOff />
-                    Žinučių nestebi
+                    Žinutės nestebimos
                   </Badge>
                 )}
               </div>
