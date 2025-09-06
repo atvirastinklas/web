@@ -22,7 +22,7 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
   };
 
   return (
-    <div className="min-w-lg h-full w-96 bg-card border-l border-border p-6 overflow-y-auto relative">
+    <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
       <div className="absolute top-2 right-2">
         <Button type="button" variant="ghost" onClick={onClose}>
           <XIcon />
