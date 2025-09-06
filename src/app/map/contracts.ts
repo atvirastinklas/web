@@ -9,6 +9,8 @@ export interface MeshNode {
   role: string;
   publicKey: string;
   lastUpdated: string;
+  latitude: number;
+  longitude: number;
   altitude: number;
   accuracy: number;
 }

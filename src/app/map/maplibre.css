@@ -642,6 +642,7 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
 .maplibregl-popup-content > div {
     display: flex;
     flex-flow: column;
+	position: relative;
 }
 
 .maplibregl-popup-anchor-top-left .maplibregl-popup-content {

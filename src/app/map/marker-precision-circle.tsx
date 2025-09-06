@@ -1,10 +1,11 @@
 import { Layer, Source } from "react-map-gl/maplibre";
 import circle from "@turf/circle";
+import type { Position } from "geojson";
 
 interface Props {
   layerId: string;
-  radius: number;
-  center: [number, number];
+  radiusInMeters: number;
+  center: Position;
 }
 
 export const MarkerPrecisionCircle = (props: Props) => {
@@ -15,7 +16,7 @@ export const MarkerPrecisionCircle = (props: Props) => {
       data={{
         type: "FeatureCollection",
         features: [
-          circle(props.center, props.radius / 1000, {
+          circle(props.center, props.radiusInMeters / 1000, {
             steps: 64,
             units: "kilometers",
           }),

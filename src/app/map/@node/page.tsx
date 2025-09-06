@@ -1,31 +1,52 @@
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Cpu, Key, MapPin, MessageCircleOff, User, XIcon } from "lucide-react";
-import type { MeshNode } from "./contracts";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  CpuIcon,
+  KeyIcon,
+  MapPinIcon,
+  MessageCircleOff,
+  UserIcon,
+  XIcon,
+} from "lucide-react";
+import type { MeshNode } from "../contracts";
 import { intlFormat } from "date-fns";
+import Link from "next/link";
 
-interface NodeSidebarProps {
-  nodeData: Partial<MeshNode>;
-  position: [number, number];
-  onClose: () => void;
+const formatAccuracy = (accuracy: number) => {
+  return `${Math.round(accuracy)}m`;
+};
+
+interface Props {
+  searchParams: Promise<{ node?: string }>;
 }
 
-export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString();
-  };
+export default async function Page(props: Props) {
+  const { node } = await props.searchParams;
 
-  const formatAccuracy = (accuracy: number) => {
-    return `${Math.round(accuracy)}m`;
-  };
+  if (node == null) {
+    return null;
+  }
+
+  const response = await fetch(`https://api.atvirastinklas.lt/node/${node}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    console.error("Failed to fetch node data", response.statusText);
+    return null;
+  }
+
+  const nodeData = (await response.json()) as MeshNode;
 
   return (
     <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
       <div className="absolute top-2 right-2">
-        <Button type="button" variant="ghost" onClick={onClose}>
-          <XIcon />
+        <Button type="button" variant="ghost" asChild>
+          <Link href="/map">
+            <XIcon />
+          </Link>
         </Button>
       </div>
       <div className="space-y-6">
@@ -58,7 +79,7 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
 
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-base font-medium">
-            <User className="h-4 w-4" />
+            <UserIcon className="h-4 w-4" />
             Node
           </h3>
           <div className="space-y-3 pl-6">
@@ -106,7 +127,7 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
           <>
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
-                <Cpu className="h-4 w-4" />
+                <CpuIcon className="h-4 w-4" />
                 Įranga
               </h3>
               <div className="space-y-3 pl-6">
@@ -131,14 +152,14 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
 
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-base font-medium">
-            <MapPin className="h-4 w-4" />
+            <MapPinIcon className="h-4 w-4" />
             Pozicija
           </h3>
           <div className="pl-6 flex flex-col gap-4">
             <div className="space-y-2">
               <span className="text-sm text-muted-foreground">Koordinatės</span>
               <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                {position.join(", ")}
+                {nodeData.latitude}, {nodeData.longitude}
               </div>
             </div>
             {nodeData.accuracy == null ? null : (
@@ -156,7 +177,7 @@ export function NodeSidebar({ nodeData, position, onClose }: NodeSidebarProps) {
 
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-base font-medium">
-            <Key className="h-4 w-4" />
+            <KeyIcon className="h-4 w-4" />
             Saugumas
           </h3>
           <div className="pl-6">
