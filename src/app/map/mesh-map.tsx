@@ -5,15 +5,14 @@ import MapComp, {
   GeolocateControl,
   Layer,
   NavigationControl,
-  ScaleControl,
   Source,
 } from "react-map-gl/maplibre";
 import type { LayerProps } from "react-map-gl/maplibre";
-import { loadMapImages } from "./utils";
 
-import "./maplibre.css";
 import { MarkerPopup } from "./marker-popup";
 import { ActiveNode } from "./active-node";
+ 
+import "./maplibre.css";
 
 export const clusterLayer: LayerProps = {
   id: "clusters",
