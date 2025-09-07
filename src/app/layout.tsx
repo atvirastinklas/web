@@ -30,6 +30,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             locale: "lt",
             translations: defaultTranslations,
           }}
+          search={{ enabled: false }}
         >
           {children}
         </RootProvider>

@@ -21,6 +21,7 @@
     "@radix-ui/react-slot": "1.2.3",
     "@radix-ui/react-tooltip": "1.2.8",
     "@turf/circle": "7.2.0",
+    "@uidotdev/usehooks": "2.4.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
@@ -35,6 +36,7 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-map-gl": "8.0.4",
+    "swr": "2.3.6",
     "tailwind-merge": "3.3.1",
     "zod": "4.1.5"
   },
