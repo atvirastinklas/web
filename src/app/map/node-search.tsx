@@ -4,14 +4,11 @@ import {
   SearchDialog,
   SearchDialogClose,
   SearchDialogContent,
-  SearchDialogFooter,
   SearchDialogHeader,
   SearchDialogIcon,
   SearchDialogInput,
   SearchDialogList,
   SearchDialogOverlay,
-  TagsList,
-  TagsListItem,
 } from "fumadocs-ui/components/dialog/search";
 import type { SharedProps } from "fumadocs-ui/contexts/search";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -26,13 +23,12 @@ interface Props extends SharedProps {}
 export default function NodeSearch(props: Props) {
   const [filter, setFilter] = useState("");
   const debouncedFilter = useDebounce(filter, 500);
+  const skipFetch = debouncedFilter.trim().length === 0;
   const { data, isLoading } = useSwr(
-    `https://api.atvirastinklas.lt/node/search?q=${debouncedFilter}`,
+    skipFetch
+      ? null
+      : `${process.env.NEXT_PUBLIC_API_URL}/node/search?q=${debouncedFilter}`,
     fetcher,
-    {
-      revalidateOnFocus: false,
-      isPaused: () => debouncedFilter.trim().length === 0,
-    },
   );
 
   const searchResults: Array<{
@@ -58,11 +54,11 @@ export default function NodeSearch(props: Props) {
         </SearchDialogHeader>
         <SearchDialogList
           items={
-            isLoading
+            isLoading || skipFetch
               ? null
               : searchResults.map((node) => ({
                   id: node.nodeId,
-                  content: `${node.shortName} (${node.longName})`,
+                  content: `${node.longName} (${node.shortName})`,
                   url: `/map?node=${node.nodeNum}`,
                   type: "text" as const,
                 }))
