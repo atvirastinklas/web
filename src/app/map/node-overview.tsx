@@ -138,35 +138,36 @@ export default async function NodeOverview(props: Props) {
         )}
 
         {nodeData.latitude == null || nodeData.longitude == null ? null : (
-          <div className="space-y-4">
-            <h3 className="flex items-center gap-2 text-base font-medium">
-              <MapPinIcon className="h-4 w-4" />
-              Pozicija
-            </h3>
-            <div className="pl-6 flex flex-col gap-4">
-              <div className="space-y-2">
-                <span className="text-sm text-muted-foreground">
-                  Koordinatės
-                </span>
-                <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                  {nodeData.latitude}, {nodeData.longitude}
-                </div>
-              </div>
-              {nodeData.accuracy == null ? null : (
-                <div className="flex justify-between items-center">
+          <>
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-2 text-base font-medium">
+                <MapPinIcon className="h-4 w-4" />
+                Pozicija
+              </h3>
+              <div className="pl-6 flex flex-col gap-4">
+                <div className="space-y-2">
                   <span className="text-sm text-muted-foreground">
-                    Tikslumas
+                    Koordinatės
                   </span>
-                  <Badge variant="outline">
-                    {formatAccuracy(nodeData.accuracy)}
-                  </Badge>
+                  <div className="bg-muted p-2 rounded text-xs font-mono break-all">
+                    {nodeData.latitude}, {nodeData.longitude}
+                  </div>
                 </div>
-              )}
+                {nodeData.accuracy == null ? null : (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">
+                      Tikslumas
+                    </span>
+                    <Badge variant="outline">
+                      {formatAccuracy(nodeData.accuracy)}
+                    </Badge>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+            <Separator />
+          </>
         )}
-
-        <Separator />
 
         <div className="space-y-4">
           <h3 className="flex items-center gap-2 text-base font-medium">
