@@ -102,7 +102,7 @@ export const MeshMap = (props: Props) => {
       <Source
         id="nodes"
         type="geojson"
-        data="https://api.atvirastinklas.lt/map/nodes.json"
+        data={`${process.env.NEXT_PUBLIC_API_URL}/map/nodes.json`}
         cluster={true}
         clusterMaxZoom={18}
         maxzoom={20}

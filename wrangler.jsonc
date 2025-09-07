@@ -2,7 +2,10 @@
   "main": ".open-next/worker.js",
   "name": "atviras-tinklas",
   "compatibility_date": "2025-08-04",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -11,6 +14,7 @@
     "NEXT_PUBLIC_GITHUB_OWNER": "atvirastinklas",
     "NEXT_PUBLIC_GITHUB_REPO": "web",
     "NEXT_PUBLIC_DOMAIN": "atvirastinklas.lt",
-    "NEXT_PUBLIC_CDN_URL": "https://cdn.atvirastinklas.lt"
+    "NEXT_PUBLIC_CDN_URL": "https://cdn.atvirastinklas.lt",
+    "NEXT_PUBLIC_API_URL": "https://api.atvirastinklas.lt"
   }
 }

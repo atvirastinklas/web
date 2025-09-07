@@ -27,10 +27,13 @@ interface Props {
 
 export default async function NodeOverview(props: Props) {
   const { node } = props;
-  const response = await fetch(`https://api.atvirastinklas.lt/node/${node}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/node/${node}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
   if (!response.ok) {
     notFound();
   }
