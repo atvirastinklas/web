@@ -14,6 +14,7 @@ import type { MeshNode } from "./contracts";
 import { intlFormat } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DateView } from "./temp-comps/date-view";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
@@ -25,13 +26,10 @@ interface Props {
 
 export default async function NodeOverview(props: Props) {
   const { node } = props;
-  const response = await fetch(
-    `https://api.atvirastinklas.lt/node/${node}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  const response = await fetch(`https://api.atvirastinklas.lt/node/${node}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
   if (!response.ok) {
     notFound();
   }
@@ -104,16 +102,7 @@ export default async function NodeOverview(props: Props) {
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">Atnaujinta</span>
               <span className="text-sm">
-                {nodeData.lastUpdated == null
-                  ? "-"
-                  : intlFormat(
-                      nodeData.lastUpdated,
-                      {
-                        dateStyle: "medium",
-                        timeStyle: "medium",
-                      },
-                      { locale: "lt" },
-                    )}
+                <DateView date={nodeData.lastUpdated} />
               </span>
             </div>
           </div>
@@ -148,28 +137,34 @@ export default async function NodeOverview(props: Props) {
           </>
         )}
 
-        <div className="space-y-4">
-          <h3 className="flex items-center gap-2 text-base font-medium">
-            <MapPinIcon className="h-4 w-4" />
-            Pozicija
-          </h3>
-          <div className="pl-6 flex flex-col gap-4">
-            <div className="space-y-2">
-              <span className="text-sm text-muted-foreground">Koordinatės</span>
-              <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                {nodeData.latitude}, {nodeData.longitude}
+        {nodeData.latitude == null || nodeData.longitude == null ? null : (
+          <div className="space-y-4">
+            <h3 className="flex items-center gap-2 text-base font-medium">
+              <MapPinIcon className="h-4 w-4" />
+              Pozicija
+            </h3>
+            <div className="pl-6 flex flex-col gap-4">
+              <div className="space-y-2">
+                <span className="text-sm text-muted-foreground">
+                  Koordinatės
+                </span>
+                <div className="bg-muted p-2 rounded text-xs font-mono break-all">
+                  {nodeData.latitude}, {nodeData.longitude}
+                </div>
               </div>
+              {nodeData.accuracy == null ? null : (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Tikslumas
+                  </span>
+                  <Badge variant="outline">
+                    {formatAccuracy(nodeData.accuracy)}
+                  </Badge>
+                </div>
+              )}
             </div>
-            {nodeData.accuracy == null ? null : (
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Tikslumas</span>
-                <Badge variant="outline">
-                  {formatAccuracy(nodeData.accuracy)}
-                </Badge>
-              </div>
-            )}
           </div>
-        </div>
+        )}
 
         <Separator />
 
