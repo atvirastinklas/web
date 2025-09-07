@@ -11,7 +11,7 @@ import type { LayerProps } from "react-map-gl/maplibre";
 
 import { MarkerPopup } from "./marker-popup";
 import { ActiveNode } from "./active-node";
- 
+
 import "./maplibre.css";
 
 export const clusterLayer: LayerProps = {
@@ -101,7 +101,7 @@ export const MeshMap = (props: Props) => {
       <Source
         id="nodes"
         type="geojson"
-        data={`${process.env.NEXT_PUBLIC_API_URL}/map/nodes.json`}
+        data="https://api.atvirastinklas.lt/map/nodes.json"
         cluster={true}
         clusterMaxZoom={18}
         maxzoom={20}

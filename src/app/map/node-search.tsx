@@ -27,7 +27,7 @@ export default function NodeSearch(props: Props) {
   const { data, isLoading } = useSwr(
     skipFetch
       ? null
-      : `${process.env.NEXT_PUBLIC_API_URL}/node/search?q=${debouncedFilter}`,
+      : `https://api.atvirastinklas.lt/node/search?q=${debouncedFilter}`,
     fetcher,
   );
 

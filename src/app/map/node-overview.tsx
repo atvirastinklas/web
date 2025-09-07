@@ -15,8 +15,6 @@ import { intlFormat } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
 };
@@ -28,7 +26,7 @@ interface Props {
 export default async function NodeOverview(props: Props) {
   const { node } = props;
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/node/${node}`,
+    `https://api.atvirastinklas.lt/node/${node}`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
