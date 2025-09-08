@@ -3,7 +3,6 @@ import {
   DropletsIcon,
   GaugeIcon,
   WindIcon,
-  ZapIcon,
   MapPinIcon,
   SunIcon,
   ScaleIcon,
@@ -97,8 +96,6 @@ export const EnvironmentMetricsSection = (props: Props) => {
     return null;
   }
 
-  const lastUpdated = new Date(props.data.lastUpdated);
-
   return (
     <div className="space-y-4">
       <h3 className="flex items-center gap-2 text-base font-medium">
@@ -129,12 +126,12 @@ export const EnvironmentMetricsSection = (props: Props) => {
             </div>
           );
         })}
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-foreground">Atnaujinta</span>
-          <span className="text-sm">
-            <DateUpdatedView date={lastUpdated} />
-          </span>
-        </div>
+      </div>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-muted-foreground">Atnaujinta</span>
+        <span className="text-sm">
+          <DateUpdatedView date={props.data.lastUpdated} />
+        </span>
       </div>
     </div>
   );

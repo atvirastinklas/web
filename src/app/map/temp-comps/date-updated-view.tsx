@@ -2,15 +2,18 @@
 
 import { intlFormat, intlFormatDistance } from "date-fns";
 
-export const DateUpdatedView = (props: { date: Date | null }) => {
+export const DateUpdatedView = (props: { date: Date | string | null }) => {
   if (props.date == null) {
     return <>-</>;
   }
 
+  const date =
+    typeof props.date === "string" ? new Date(props.date) : props.date;
+
   return (
     <span
       title={intlFormat(
-        props.date,
+        date,
         {
           dateStyle: "medium",
           timeStyle: "medium",
@@ -18,7 +21,7 @@ export const DateUpdatedView = (props: { date: Date | null }) => {
         { locale: "lt" },
       )}
     >
-      {intlFormatDistance(props.date, new Date(), {
+      {intlFormatDistance(date, new Date(), {
         locale: "lt",
         style: "long",
         numeric: "always",
