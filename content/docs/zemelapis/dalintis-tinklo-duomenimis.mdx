@@ -1,39 +1,37 @@
 ---
-title: Siųsti informaciją į MQTT
-description: Sužinok, kaip tapti pagrindinio kanalo duomenų siuntėju į MQTT.
+title: Dalintis tinklo duomenimis
+description: Kaip tapti duomenų siuntėju į MQTT serverį.
 ---
 
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
-[Atvirojo Tinklo žemėlapis](/map) atvaizduoja informaciją iš bendro, viešojo Meshtastic MQTT serverio.
+[Atviro Tinklo žemėlapis](/map) naudoja oficialų Meshtastic® MQTT serverį duomenims rinkti ir rodyti.  
+Kad žemėlapyje matytųsi jūsų ar kitų aplinkinių įrenginiai, bent vienas įrenginys turi perduoti pagrindinio kanalo duomenis į MQTT.
 
-Jei jūsų įrenginys (ar kiti aplinkui esantys įrenginiai) jau yra [atlikę visus pasiruošimos kad matytųsi žemėlapyje](/docs/), tereikia kažkam šią informaciją iš pagrindinio kanalo surinkti ir atsiųsti MQTT serveriui.
+Instrukcijos skiriasi pagal tai, ar įrenginys turi Wi-Fi / Ethernet ryšį:
 
-Žingsniai tai atlikti priklauso, ar jūsų įrenginys turi "Wifi" galimybes:
+<Tabs items={['Turi Wi-Fi / Ethernet', 'Neturi interneto ryšio']} defaultIndex={1}>
+  <Tab value="Turi Wi-Fi / Ethernet">
+    Jei įrenginys palaiko **Wi-Fi arba Ethernet** ryšį, galite lengvai sukonfigūruoti duomenų siuntimą.  
+    Vadovaukitės [oficialiomis instrukcijomis](https://meshtastic.org/docs/configuration/module/mqtt/#connect-to-the-default-public-server) ir įveskite šiuos nustatymus:
 
-<Tabs items={['Įrenginys turi Wifi', 'Įrenginys neturi Wifi']} defaultIndex={1}>
-  <Tab value="Įrenginys turi Wifi">
-  Jei jūsų įrenginys turi "Wifi" galimybę, duomenų siuntimas labai lengvas.
 
-  Kaip [oficialiose Meshtastic.org instrukcijose](https://meshtastic.org/docs/configuration/module/mqtt/#connect-to-the-default-public-server), sukonfigūruokite bendrą viešąjį MQTT serverį, tik pakeiskite "Topic" į `msh/EU_868/LT`.
-
-  | Nustatymas                | Reikšmė             |
-  |---------------------------|---------------------|
-  | Enabled                   | true (įjungta)      |
-  | MQTT server address       | mqtt.meshtastic.org |
-  | MQTT username             | meshdev             |
-  | MQTT password             | large4cats          |
-  | Encryption enabled        | true (įjungta)      |
-  | JSON enabled              | false (išjungta)    |
-  | TLS enabled               | false (išjungta)    |
-  | Root topic                | msh/EU_868/LT       |
-  | MQTT Client Proxy enabled | false (išjungta)    |
+  | Nustatymas                | Reikšmė               |
+  |---------------------------|-----------------------|
+  | Enabled                   | `true` (įjungta)      |
+  | MQTT server address       | `mqtt.meshtastic.org` |
+  | MQTT username             | `meshdev`             |
+  | MQTT password             | `large4cats`          |
+  | Encryption enabled        | `true` (įjungta)      |
+  | JSON enabled              | `false` (išjungta)    |
+  | TLS enabled               | `false` (išjungta)    |
+  | Root topic                | `msh/EU_868/LT`       |
+  | MQTT Client Proxy enabled | `false` (išjungta)    |
   </Tab>
-  <Tab value="Įrenginys neturi Wifi">
-  Jei jūsų įrenginys neturi "Wifi" galimybių, rekomenduojame nebandyti siųsti duomenų į MQTT.
 
-  Įrenginiams be "Wifi" vienintelis būdas siųsti duomenis yra per jūsų mobilųjį telefoną arba kompiuterio naršyklę. Nė vienas iš šių būdų nėra patikimas, ilagalaikis duomenų siuntėjas.
-
-  Tačiau, jei labai norite - sukonfigūruokite įrenginį taip pat, lyg jis turėtų "Wifi" galimybes (kitas skirtukas), tik įjunkite ["MQTT Client Proxy enabled" nustatymą](https://meshtastic.org/docs/configuration/module/mqtt/#client-proxy-enabled).
-  </Tab>
+<Tab value="Neturi interneto ryšio">
+  Jei įrenginys **neturi tiesioginio interneto ryšio**, duomenis galima perduoti per mobilųjį telefoną ar naršyklę.  
+  Tačiau tai nėra patikimas ar ilgalaikis sprendimas - toks būdas tinkamas tik testavimui.  
+  Plačiau apie šį nustatymą skaitykite čia: [„MQTT Client Proxy enabled“](https://meshtastic.org/docs/configuration/module/mqtt/#client-proxy-enabled).
+</Tab>
 </Tabs>
