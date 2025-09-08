@@ -1,0 +1,79 @@
+---
+title: Noriu matytis žemėlapyje
+description: Sužinok, kaip leisti savo įrenginiui matytis Atviro Tinklo žemėlapyje.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<Callout title="Dėmesio - MQTT serverių informacija matoma viešai" type="warning">
+  Atviro Tinklo žemėlapio naudojamas MQTT serveris yra bendras, viešas Meshtastic MQTT serveris. Jame informacija yra matoma visam pasauliui, viešai.
+
+  Prieš keisdami savo įrenginio parametrus įstikinkite jog sutinkate, kad įrenginio informacija būtų matoma viešai.
+
+  Į siunčiamą informaciją gali patekti ši informacija (ir netik):
+  - Įrenginio pavadinimas
+  - Įrenginio ID (Node ID)
+  - Irenginio lokacija
+  - Įrenginio baterijos įkrovos kiekis
+  - Prijungtų aplinkos jutiklių duomenys
+  - Įrenginio siunčiamos žinutės numatytame kanale
+</Callout>
+
+Jei norite išvysti savo Meshtastic įrenginį [Atvirojo Tinklo žemėlapyje](/map), tereikia patenkinti šias sąlygas:
+
+<Steps>
+<Step>
+### Naudoti numatytąjį pagrindinį kanalą
+
+<Callout title="Numatytasis kanalas yra numatytasis" type="note">
+  Jei jūs savo įrenginyje niekad nekeitėte kanalų konfigūracijos - tikėtina, jog jūsų įrenginys jau naudoja numatytąjį pagrindinį kanalą.
+</Callout>
+
+Numatytasis Meshtastic kanalas vadinasi `LongFast`, ir turi `AQ==` kaip šifravimo raktą.
+
+Kanalų konfigūracija gali skirtis tarp prietaisų - [žr. Meshtastic.org puslapį apie kanalų konfigūravimą](https://meshtastic.org/docs/configuration/radio/channels/#channel-config-client-availability).
+</Step>
+<Step>
+### Dalintis savo lokacija pagrindiniame kanale
+
+Šio nustatymo konfigūravimas skirtingose programėlėse / įrenginiuose gali skirtis.
+
+Pagrindinio kanalo nustatymuose įsitikinkite, jog:
+  - Lokacijos dalinimasis įjungtas ("Position enabled")
+  - Lokacijos tikslumas jus tenkina (galima pasirinkti 200m, 1500m ir didesnę paklaidą norint privatumo)
+
+Kai kuriose programėlėse šis nustatymas valdomas vienu pasirinkimu bendrai.
+</Step>
+<Step>
+### Įjungti GPS lokaciją
+
+Net jei dalinatės savo lokacija su kanalu, jūsų įrenginys paprasčiausiai gali savo lokacijos net nežinoti.
+
+Jei jūsų įrenginys turi GPS modulį, [jį įgalinkite "Position" modulio nustatymuose](https://meshtastic.org/docs/configuration/radio/position/#gps-mode).
+
+Taip pat rekomenduojame pažymėti ne mažesnį nei 900 sekundžių lokacijos dalinimosi intervalą (o "Smart position" nejudantiems įrenginiams - išjungti).
+
+Jei jūsų įrenginys neturi GPS modulio, įmanoma jam [nustatyti fiksuotą lokaciją](https://meshtastic.org/docs/configuration/radio/position/#fixed-position). Kaip tai padaryti - kiek skiriasi programėlėse (ir ne visose įmanoma), bet turbūt lengviausia - prisijungti prie įrenginio su mobiliu telefonu, ir pasidalinti su juo telefono GPS lokacija.
+
+</Step>
+<Step>
+### "OK to MQTT"
+
+Po praeitų žingsnių, jūsų įrenginys jau dalinasi savo lokacija su numatytuoju kanalu.
+
+Tačiau - kad šią lokaciją (ir bet kokią kitą informaciją apie jūsų įrenginį) kažkas galėtų siųsti į MQTT serverį, jums reikia nustatyti tam leidimą.
+
+Tai padaryti lengva - "LoRa" modulyje įjunkite ["OK to MQTT" parametrą](https://meshtastic.org/docs/configuration/radio/lora/#ok-to-mqtt).
+
+<Callout title="Dėmesio - 'OK to MQTT: false' yra tik prašymas" type="warning">
+  Šis nustatymas yra tik mandagus prašymas. Supraskite - net jei šį nustatymą išjungiate, "pikti" kanalo klausytojai vistiek "girdi" jūsų lokaciją, ir techniškai gali su ja daryti ką nori.
+</Callout>
+</Step>
+<Step>
+### Kažkas turi siųsti šią informaciją į MQTT serverį
+
+Jei atlikus aukščiau esančius žingsius per valandą įrenginys neatsirado žemėlapyje, gali būti, jog aplinkui jus nėra įrenginių, kurie dalinasi pagrindinio kanalo duomenimis su MQTT serveriu.
+
+Tai galite atlikti ir patys, pagal [instrukcijas šiame puslapyje](/docs/atviro-tinklo-zemelapio-duomenys/siusti-duomenis-i-mqtt).
+</Step>
+</Steps>

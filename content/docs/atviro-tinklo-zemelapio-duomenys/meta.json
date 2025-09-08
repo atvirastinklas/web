@@ -1,0 +1,8 @@
+{
+	"title": "Žemėlapio duomenys",
+	"icon": "map-pinned",
+	"pages": [
+		"noriu-matytis-zemelapyje",
+		"siusti-duomenis-i-mqtt"
+	]
+}
