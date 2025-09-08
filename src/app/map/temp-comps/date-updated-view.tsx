@@ -1,3 +1,5 @@
+"use client";
+
 import { intlFormat, intlFormatDistance } from "date-fns";
 
 export const DateUpdatedView = (props: { date: Date | null }) => {
@@ -19,7 +21,7 @@ export const DateUpdatedView = (props: { date: Date | null }) => {
       {intlFormatDistance(props.date, new Date(), {
         locale: "lt",
         style: "long",
-        numeric: "always"
+        numeric: "always",
       })}
     </span>
   );
