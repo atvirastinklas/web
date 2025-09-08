@@ -81,7 +81,7 @@ const mapStyle = (theme: string | undefined) => {
 
 interface Props {
   nodeNum: number | null;
-  viewMode?: "both" | "map";
+  viewMode: "both" | "map";
   nodeOverview?: React.ReactNode;
 }
 
@@ -105,10 +105,12 @@ export const MeshMap = (props: Props) => {
           layers={["unclustered-nodes", "clusters"]}
         />
         <ActiveNode sourceId="nodes" nodeNum={props.nodeNum} />
-        <OverviewButton
-          currentView={props.viewMode ?? "map"}
-          className="absolute top-4 right-4 z-10 gap-2"
-        />
+        {props.nodeNum == null ? null : (
+          <OverviewButton
+            currentView={props.viewMode}
+            className="absolute top-4 right-4 z-10 gap-2"
+          />
+        )}
         <Source
           id="nodes"
           type="geojson"
