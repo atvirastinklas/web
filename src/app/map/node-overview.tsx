@@ -15,6 +15,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DateUpdatedView } from "./temp-comps/date-updated-view";
 import { lt } from "date-fns/locale";
+import { nodeNumToId } from "@/utils/meshtastic";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
@@ -57,7 +58,7 @@ export default async function NodeOverview(props: Props) {
         {nodeData.info == null ? (
           <NodeHeader
             title={`Nežinomas node: ${nodeData.nodeNum}`}
-            avatarText={nodeData.nodeNum.toString()}
+            avatarText={nodeNumToId(nodeData.nodeNum)}
             isUnmessagable={false}
           />
         ) : (
@@ -252,15 +253,32 @@ interface NodeHeaderProps {
   title: string;
   avatarText: string;
   role?: string;
-  isUnmessagable: boolean;
+  isUnmessagable?: boolean;
 }
 
 const NodeHeader = (props: NodeHeaderProps) => {
+  // Use rem values that are easier to read and adjust
+  let fontSize = "1.25rem";
+  if (props.avatarText.length >= 6) {
+    fontSize = "0.5rem";
+  } else if (props.avatarText.length >= 4) {
+    fontSize = "0.75rem";
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
         <Avatar className="h-12 w-12">
-          <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+          <AvatarFallback
+            className="bg-primary text-primary-foreground font-semibold"
+            style={{
+              fontSize,
+              lineHeight: 1,
+              letterSpacing: "-0.01em",
+              padding: "0 2px",
+            }}
+            title={props.avatarText}
+          >
             {props.avatarText}
           </AvatarFallback>
         </Avatar>
@@ -272,7 +290,7 @@ const NodeHeader = (props: NodeHeaderProps) => {
             {props.role == null ? null : (
               <Badge variant="outline">{props.role}</Badge>
             )}
-            {!props.isUnmessagable == null ? null : (
+            {props.isUnmessagable == null || !props.isUnmessagable ? null : (
               <Badge variant="default">
                 <MessageCircleOff />
                 Žinutės nestebimos
