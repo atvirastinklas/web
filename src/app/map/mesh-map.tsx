@@ -12,6 +12,10 @@ import type { LayerProps } from "react-map-gl/maplibre";
 import { MarkerPopup } from "./marker-popup";
 import { ActiveNode } from "./active-node";
 
+import { Button } from "@/components/ui/button";
+import { LayoutGridIcon, MapIcon } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import "./maplibre.css";
 
 export const clusterLayer: LayerProps = {
@@ -77,41 +81,81 @@ const mapStyle = (theme: string | undefined) => {
 
 interface Props {
   nodeNum: number | null;
+  viewMode?: "both" | "map";
+  nodeOverview?: React.ReactNode;
 }
 
 export const MeshMap = (props: Props) => {
   const { theme } = useTheme();
 
   return (
-    <MapComp
-      initialViewState={{
-        bounds: [21.0558004086, 53.9057022162, 26.5882792498, 56.3725283881],
-        fitBoundsOptions: { padding: 40 },
-      }}
-      mapStyle={mapStyle(theme)}
-    >
-      <GeolocateControl position="top-left" />
-      <FullscreenControl position="top-left" />
-      <NavigationControl position="top-left" />
-      <MarkerPopup
-        sourceId="nodes"
-        layers={["unclustered-nodes", "clusters"]}
-      />
-      <ActiveNode sourceId="nodes" nodeNum={props.nodeNum} />
-      <Source
-        id="nodes"
-        type="geojson"
-        data="https://api.atvirastinklas.lt/map/nodes.json"
-        cluster={true}
-        clusterMaxZoom={18}
-        maxzoom={20}
-        clusterRadius={25}
+    <>
+      <MapComp
+        initialViewState={{
+          bounds: [21.0558004086, 53.9057022162, 26.5882792498, 56.3725283881],
+          fitBoundsOptions: { padding: 40 },
+        }}
+        mapStyle={mapStyle(theme)}
       >
-        <Layer {...clusterLayer} />
-        <Layer {...clusterCountLayer} />
-        <Layer {...unclusteredNodeLayer} />
-        <Layer {...unclusteredNodeLabelLayer} />
-      </Source>
-    </MapComp>
+        <GeolocateControl position="top-left" />
+        <FullscreenControl position="top-left" />
+        <NavigationControl position="top-left" />
+        <MarkerPopup
+          sourceId="nodes"
+          layers={["unclustered-nodes", "clusters"]}
+        />
+        <ActiveNode sourceId="nodes" nodeNum={props.nodeNum} />
+        <OverviewButton
+          currentView={props.viewMode ?? "map"}
+          className="absolute top-4 right-4 z-10 gap-2"
+        />
+        <Source
+          id="nodes"
+          type="geojson"
+          data="https://api.atvirastinklas.lt/map/nodes.json"
+          cluster={true}
+          clusterMaxZoom={18}
+          maxzoom={20}
+          clusterRadius={25}
+        >
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
+          <Layer {...unclusteredNodeLayer} />
+          <Layer {...unclusteredNodeLabelLayer} />
+        </Source>
+      </MapComp>
+      {props.viewMode === "map" ? null : props.nodeOverview}
+    </>
+  );
+};
+
+interface OverviewButtonProps {
+  currentView: "both" | "map";
+  className?: string;
+}
+
+const OverviewButton = (props: OverviewButtonProps) => {
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+
+  const { icon: ViewIcon, label } =
+    props.currentView === "map"
+      ? { icon: MapIcon, label: "Tik žemėlapis" }
+      : { icon: LayoutGridIcon, label: "Rodyti abudu" };
+
+  return (
+    <Button
+      variant="default"
+      size="sm"
+      onClick={() => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("viewMode", props.currentView === "both" ? "map" : "both");
+        replace(`?${params.toString()}`);
+      }}
+      className={props.className}
+    >
+      <ViewIcon className="h-4 w-4" />
+      {label}
+    </Button>
   );
 };

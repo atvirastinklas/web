@@ -11,17 +11,20 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 interface Props {
-  searchParams: Promise<{ node?: string }>;
+  searchParams: Promise<{ node?: string; viewMode?: "both" | "map" }>;
 }
 
 export default async function Page(props: Props) {
   const { searchParams } = props;
-  const { node } = await searchParams;
+  const { node, viewMode = "both" } = await searchParams;
 
   return (
     <>
-      <MeshMap nodeNum={node ? Number.parseInt(node) : null} />
-      {node == null ? null : <NodeOverview node={node} />}
+      <MeshMap
+        nodeNum={node ? Number.parseInt(node) : null}
+        viewMode={viewMode}
+        nodeOverview={node == null ? null : <NodeOverview node={node} />}
+      />
     </>
   );
 }

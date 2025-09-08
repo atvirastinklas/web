@@ -17,6 +17,7 @@ import { DateUpdatedView } from "./temp-comps/date-updated-view";
 import { lt } from "date-fns/locale";
 import { nodeNumToId } from "@/utils/meshtastic";
 import { EnvironmentMetricsSection } from "./node-overview/environment-metrics-section";
+import { GoToMapButton } from "./node-overview/go-to-map-button";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
@@ -48,8 +49,9 @@ export default async function NodeOverview(props: Props) {
 
   return (
     <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
-      <div className="absolute top-2 right-2">
-        <Button type="button" variant="ghost" asChild>
+      <div className="absolute top-4 right-4">
+        <GoToMapButton className="mr-2" />
+        <Button type="button" variant="outline" asChild>
           <Link href="/map">
             <XIcon />
           </Link>
@@ -110,7 +112,7 @@ export default async function NodeOverview(props: Props) {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
-                    Radijo mėgėjas (Licensed)
+                    Radijo mėgėjas (Licencijuotas)
                   </span>
                   <Badge
                     variant={nodeData.info.isLicensed ? "default" : "secondary"}
