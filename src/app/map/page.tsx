@@ -3,11 +3,12 @@ import { MeshMap } from "./mesh-map";
 import NodeOverview from "./node-overview";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://atvirastinklas.lt"),
   title: "Žemėlapis | Atviras Tinklas",
   description:
     "Mes siekiame sukurti atvirą ryšio tinklą, kuriuo galėtų naudotis visi - tiek nelaimės atveju, tiek paprastam bendravimui. Nepriklausoma sistema, veikianti be interneto ir mobiliojo ryšio.",
   openGraph: {
-    images: ["/public/assets/map/social.jpg"],
+    images: ["/assets/map/opengraph-image.png"],
   },
 };
 
