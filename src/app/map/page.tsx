@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Žemėlapis | Atviras Tinklas",
   description:
     "Mes siekiame sukurti atvirą ryšio tinklą, kuriuo galėtų naudotis visi - tiek nelaimės atveju, tiek paprastam bendravimui. Nepriklausoma sistema, veikianti be interneto ir mobiliojo ryšio.",
+  openGraph: {
+    images: ["/public/assets/map/social.jpg"],
+  },
 };
 
 export const dynamic = "force-dynamic";
