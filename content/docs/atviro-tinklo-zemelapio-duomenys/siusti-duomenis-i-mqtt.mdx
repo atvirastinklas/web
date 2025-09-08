@@ -1,0 +1,39 @@
+---
+title: Siųsti informaciją į MQTT
+description: Sužinok, kaip tapti pagrindinio kanalo duomenų siuntėju į MQTT.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+[Atvirojo Tinklo žemėlapis](/map) atvaizduoja informaciją iš bendro, viešojo Meshtastic MQTT serverio.
+
+Jei jūsų įrenginys (ar kiti aplinkui esantys įrenginiai) jau yra [atlikę visus pasiruošimos kad matytųsi žemėlapyje](/docs/), tereikia kažkam šią informaciją iš pagrindinio kanalo surinkti ir atsiųsti MQTT serveriui.
+
+Žingsniai tai atlikti priklauso, ar jūsų įrenginys turi "Wifi" galimybes:
+
+<Tabs items={['Įrenginys turi Wifi', 'Įrenginys neturi Wifi']} defaultIndex={1}>
+  <Tab value="Įrenginys turi Wifi">
+  Jei jūsų įrenginys turi "Wifi" galimybę, duomenų siuntimas labai lengvas.
+
+  Kaip [oficialiose Meshtastic.org instrukcijose](https://meshtastic.org/docs/configuration/module/mqtt/#connect-to-the-default-public-server), sukonfigūruokite bendrą viešąjį MQTT serverį, tik pakeiskite "Topic" į `msh/EU_868/LT`.
+
+  | Nustatymas                | Reikšmė             |
+  |---------------------------|---------------------|
+  | Enabled                   | true (įjungta)      |
+  | MQTT server address       | mqtt.meshtastic.org |
+  | MQTT username             | meshdev             |
+  | MQTT password             | large4cats          |
+  | Encryption enabled        | true (įjungta)      |
+  | JSON enabled              | false (išjungta)    |
+  | TLS enabled               | false (išjungta)    |
+  | Root topic                | msh/EU_868/LT       |
+  | MQTT Client Proxy enabled | false (išjungta)    |
+  </Tab>
+  <Tab value="Įrenginys neturi Wifi">
+  Jei jūsų įrenginys neturi "Wifi" galimybių, rekomenduojame nebandyti siųsti duomenų į MQTT.
+
+  Įrenginiams be "Wifi" vienintelis būdas siųsti duomenis yra per jūsų mobilųjį telefoną arba kompiuterio naršyklę. Nė vienas iš šių būdų nėra patikimas, ilagalaikis duomenų siuntėjas.
+
+  Tačiau, jei labai norite - sukonfigūruokite įrenginį taip pat, lyg jis turėtų "Wifi" galimybes (kitas skirtukas), tik įjunkite ["MQTT Client Proxy enabled" nustatymą](https://meshtastic.org/docs/configuration/module/mqtt/#client-proxy-enabled).
+  </Tab>
+</Tabs>
