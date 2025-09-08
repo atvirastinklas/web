@@ -32,4 +32,28 @@ export interface MeshNode {
     lastUpdated: Date;
     updatedBy: string | null;
   } | null;
+  environmentMetrics: EnvironmentMetrics | null;
+}
+
+export interface EnvironmentMetrics {
+  temperature: number | null;
+  relativeHumidity: number | null;
+  barometricPressure: number | null;
+  gasResistance: number | null;
+  iaq: number | null;
+  distance: number | null;
+  lux: number | null;
+  whiteLux: number | null;
+  irLux: number | null;
+  uvLux: number | null;
+  windDirection: number | null;
+  windSpeed: number | null;
+  weight: number | null;
+  windGust: number | null;
+  windLull: number | null;
+  radiation: number | null;
+  rainfall1h: number | null;
+  rainfall24h: number | null;
+  soilMoisture: number | null;
+  soilTemperature: number | null;
 }

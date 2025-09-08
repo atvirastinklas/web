@@ -16,6 +16,7 @@ import { notFound } from "next/navigation";
 import { DateUpdatedView } from "./temp-comps/date-updated-view";
 import { lt } from "date-fns/locale";
 import { nodeNumToId } from "@/utils/meshtastic";
+import { EnvironmentMetricsSection } from "./node-overview/environment-metrics-section";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
@@ -143,7 +144,7 @@ export default async function NodeOverview(props: Props) {
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
                 <ChartSplineIcon className="h-4 w-4" />
-                Įrenginio metrika
+                Įrenginio rodikliai
               </h3>
               <div className="space-y-3 pl-6">
                 <HorizontalStat
@@ -242,8 +243,10 @@ export default async function NodeOverview(props: Props) {
                 </div>
               </div>
             </div>
+            <Separator />
           </>
         )}
+        <EnvironmentMetricsSection data={nodeData.environmentMetrics} />
       </div>
     </div>
   );
