@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+  ChartSplineIcon,
   CpuIcon,
   KeyIcon,
   MapPinIcon,
@@ -11,13 +12,22 @@ import {
   XIcon,
 } from "lucide-react";
 import type { MeshNode } from "./contracts";
-import { intlFormat } from "date-fns";
+import { formatDuration, intervalToDuration, intlFormat } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DateView } from "./temp-comps/date-view";
+import { lt } from "date-fns/locale";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
+};
+
+const formatUptime = (seconds: number) => {
+  const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
+  return formatDuration(duration, {
+    format: ["days", "hours", "minutes"],
+    locale: lt,
+  });
 };
 
 interface Props {
@@ -46,98 +56,153 @@ export default async function NodeOverview(props: Props) {
         </Button>
       </div>
       <div className="space-y-6">
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12">
-              <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
-                {nodeData.shortName}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h2 className="text-xl font-semibold text-foreground">
-                {nodeData.longName}
-              </h2>
-              <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <Badge variant="outline">{nodeData.role}</Badge>
-                {nodeData.isUnmessagable && (
-                  <Badge variant="default">
-                    {" "}
-                    <MessageCircleOff />
-                    Žinutės nestebimos
-                  </Badge>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
+        {nodeData.info == null ? (
+          <NodeHeader
+            title={`Nežinomas node: ${nodeData.nodeNum}`}
+            avatarText={nodeData.nodeNum.toString()}
+            isUnmessagable={false}
+          />
+        ) : (
+          <NodeHeader
+            title={nodeData.info.longName}
+            avatarText={nodeData.info.shortName}
+            role={nodeData.info.role}
+            isUnmessagable={nodeData.info.isUnmessagable}
+          />
+        )}
         <Separator />
 
-        <div className="space-y-4">
-          <h3 className="flex items-center gap-2 text-base font-medium">
-            <UserIcon className="h-4 w-4" />
-            Node
-          </h3>
-          <div className="space-y-3 pl-6">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Node ID</span>
-              <code className="text-sm bg-muted px-2 py-1 rounded">
-                {nodeData.nodeId}
-              </code>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                Node numeris
-              </span>
-              <span className="text-sm font-mono">{nodeData.nodeNum}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                Radijo mėgėjas (Licensed)
-              </span>
-              <Badge variant={nodeData.isLicensed ? "default" : "secondary"}>
-                {nodeData.isLicensed ? "Taip" : "Ne"}
-              </Badge>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">Atnaujinta</span>
-              <span className="text-sm">
-                <DateView date={nodeData.lastUpdated} />
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <Separator />
-
-        {nodeData.hwModel == null ? null : (
+        {nodeData.info == null ? null : (
           <>
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
-                <CpuIcon className="h-4 w-4" />
-                Įranga
+                <UserIcon className="h-4 w-4" />
+                Node informacija
               </h3>
-              <div className="space-y-3 pl-6">
-                <div className="w-full h-24 flex items-center justify-center">
-                  <img
-                    src={`/assets/map/hardware/${nodeData.hwModel}.png`}
-                    alt={nodeData.hwModel}
-                    className="w-full h-full object-contain rounded"
-                  />
+              <div className="space-y-4">
+                <div className="space-y-3 pl-6">
+                  <div className="w-full h-24 flex items-center justify-center">
+                    <img
+                      src={`/assets/map/hardware/${nodeData.info.hwModel}.png`}
+                      alt={nodeData.info.hwModel}
+                      className="w-full h-full object-contain rounded"
+                    />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium">
+                      {nodeData.info.hwModel?.replace(/_/g, " ")}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium">
-                    {nodeData.hwModel?.replace(/_/g, " ")}
-                  </p>
+              </div>
+              <div className="space-y-3 pl-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Node ID</span>
+                  <code className="text-sm bg-muted px-2 py-1 rounded">
+                    {nodeData.info.nodeId}
+                  </code>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Node numeris
+                  </span>
+                  <span className="text-sm font-mono">{nodeData.nodeNum}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Radijo mėgėjas (Licensed)
+                  </span>
+                  <Badge
+                    variant={nodeData.info.isLicensed ? "default" : "secondary"}
+                  >
+                    {nodeData.info.isLicensed ? "Taip" : "Ne"}
+                  </Badge>
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm text-muted-foreground">
+                    Viešas raktas (Public Key)
+                  </span>
+                  <div className="bg-muted p-2 rounded text-xs font-mono break-all">
+                    {nodeData.info.publicKey}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Atnaujinta
+                  </span>
+                  <span className="text-sm">
+                    <DateView date={nodeData.info.lastUpdated} />
+                  </span>
                 </div>
               </div>
             </div>
-
             <Separator />
           </>
         )}
-
-        {nodeData.latitude == null || nodeData.longitude == null ? null : (
+        {nodeData.deviceMetrics == null ? null : (
+          <>
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-2 text-base font-medium">
+                <ChartSplineIcon className="h-4 w-4" />
+                Įrenginio metrika
+              </h3>
+              <div className="space-y-3 pl-6">
+                <HorizontalStat
+                  label="Baterijos lygis"
+                  value={nodeData.deviceMetrics.batteryLevel}
+                >
+                  {(value) => (
+                    <Badge variant={value > 50 ? "default" : "destructive"}>
+                      {value}%
+                    </Badge>
+                  )}
+                </HorizontalStat>
+                <HorizontalStat
+                  label="Įtampa"
+                  value={nodeData.deviceMetrics.voltage}
+                >
+                  {(value) => (
+                    <span className="font-mono">{value.toFixed(2)}V</span>
+                  )}
+                </HorizontalStat>
+                <HorizontalStat
+                  label="Kanalo apkrova"
+                  value={nodeData.deviceMetrics.channelUtilization}
+                >
+                  {(value) => (
+                    <span className="font-mono">{`${value.toFixed(2)}%`}</span>
+                  )}
+                </HorizontalStat>
+                <HorizontalStat
+                  label="Eterio apkrova (TX)"
+                  value={nodeData.deviceMetrics.airUtilTx}
+                >
+                  {(value) => (
+                    <span className="font-mono">{`${value.toFixed(2)}%`}</span>
+                  )}
+                </HorizontalStat>
+                <HorizontalStat
+                  label="Veikimo laikas"
+                  value={nodeData.deviceMetrics.uptimeSeconds}
+                >
+                  {(value) => (
+                    <span className="text-sm">{formatUptime(value)}</span>
+                  )}
+                </HorizontalStat>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Atnaujinta
+                  </span>
+                  <span className="text-sm">
+                    <DateView date={nodeData.deviceMetrics.lastUpdated} />
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Separator />
+          </>
+        )}
+        {nodeData.positionPartial == null ? null : (
           <>
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
@@ -150,42 +215,88 @@ export default async function NodeOverview(props: Props) {
                     Koordinatės
                   </span>
                   <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                    {nodeData.latitude}, {nodeData.longitude}
+                    {nodeData.positionPartial.latitude},{" "}
+                    {nodeData.positionPartial.longitude}
                   </div>
                 </div>
-                {nodeData.accuracy == null ? null : (
+                {nodeData.positionPartial.accuracy == null ? null : (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
                       Tikslumas
                     </span>
                     <Badge variant="outline">
-                      {formatAccuracy(nodeData.accuracy)}
+                      {formatAccuracy(nodeData.positionPartial.accuracy)}
                     </Badge>
                   </div>
                 )}
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Atnaujinta
+                  </span>
+                  <span className="text-sm">
+                    <DateView date={nodeData.positionPartial.lastUpdated} />
+                  </span>
+                </div>
               </div>
             </div>
-            <Separator />
           </>
         )}
+      </div>
+    </div>
+  );
+}
 
-        <div className="space-y-4">
-          <h3 className="flex items-center gap-2 text-base font-medium">
-            <KeyIcon className="h-4 w-4" />
-            Saugumas
-          </h3>
-          <div className="pl-6">
-            <div className="space-y-2">
-              <span className="text-sm text-muted-foreground">
-                Viešas raktas (Public Key)
-              </span>
-              <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                {nodeData.publicKey}
-              </div>
-            </div>
+interface NodeHeaderProps {
+  title: string;
+  avatarText: string;
+  role?: string;
+  isUnmessagable: boolean;
+}
+
+const NodeHeader = (props: NodeHeaderProps) => {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Avatar className="h-12 w-12">
+          <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
+            {props.avatarText}
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">
+            {props.title}
+          </h2>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
+            {props.role == null ? null : (
+              <Badge variant="outline">{props.role}</Badge>
+            )}
+            {!props.isUnmessagable == null ? null : (
+              <Badge variant="default">
+                <MessageCircleOff />
+                Žinutės nestebimos
+              </Badge>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+interface HorizontalStatProps<TValue> {
+  label: string;
+  value: TValue | null;
+  children: (value: TValue) => React.ReactNode;
 }
+
+const HorizontalStat = <TValue,>(props: HorizontalStatProps<TValue>) => {
+  if (props.value == null) {
+    return null;
+  }
+  return (
+    <div className="flex justify-between items-center">
+      <span className="text-sm text-muted-foreground">{props.label}</span>
+      {props.children(props.value)}
+    </div>
+  );
+};
