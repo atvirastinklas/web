@@ -4,18 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   ChartSplineIcon,
-  CpuIcon,
-  KeyIcon,
   MapPinIcon,
   MessageCircleOff,
   UserIcon,
   XIcon,
 } from "lucide-react";
 import type { MeshNode } from "./contracts";
-import { formatDuration, intervalToDuration, intlFormat } from "date-fns";
+import { formatDuration, intervalToDuration } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DateView } from "./temp-comps/date-view";
+import { DateUpdatedView } from "./temp-comps/date-updated-view";
 import { lt } from "date-fns/locale";
 
 const formatAccuracy = (accuracy: number) => {
@@ -131,7 +129,7 @@ export default async function NodeOverview(props: Props) {
                     Atnaujinta
                   </span>
                   <span className="text-sm">
-                    <DateView date={nodeData.info.lastUpdated} />
+                    <DateUpdatedView date={nodeData.info.lastUpdated} />
                   </span>
                 </div>
               </div>
@@ -194,7 +192,9 @@ export default async function NodeOverview(props: Props) {
                     Atnaujinta
                   </span>
                   <span className="text-sm">
-                    <DateView date={nodeData.deviceMetrics.lastUpdated} />
+                    <DateUpdatedView
+                      date={nodeData.deviceMetrics.lastUpdated}
+                    />
                   </span>
                 </div>
               </div>
@@ -210,14 +210,14 @@ export default async function NodeOverview(props: Props) {
                 Pozicija
               </h3>
               <div className="pl-6 flex flex-col gap-4">
-                <div className="space-y-2">
+                <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
                     Koordinatės
                   </span>
-                  <div className="bg-muted p-2 rounded text-xs font-mono break-all">
+                  <code className="text-sm bg-muted px-2 py-1 rounded">
                     {nodeData.positionPartial.latitude},{" "}
                     {nodeData.positionPartial.longitude}
-                  </div>
+                  </code>
                 </div>
                 {nodeData.positionPartial.accuracy == null ? null : (
                   <div className="flex justify-between items-center">
@@ -234,7 +234,9 @@ export default async function NodeOverview(props: Props) {
                     Atnaujinta
                   </span>
                   <span className="text-sm">
-                    <DateView date={nodeData.positionPartial.lastUpdated} />
+                    <DateUpdatedView
+                      date={nodeData.positionPartial.lastUpdated}
+                    />
                   </span>
                 </div>
               </div>

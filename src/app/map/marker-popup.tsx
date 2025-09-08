@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MarkerPrecisionCircle } from "./marker-precision-circle";
+import { DateUpdatedView } from "./temp-comps/date-updated-view";
 
 const nodeSchema = z.object({
   nodeNum: z.number(),
@@ -151,29 +152,6 @@ export const MarkerPopup = (props: Props) => {
   );
 };
 
-const HumanReadableDuration = (props: { date: Date | null }) => {
-  if (props.date == null) {
-    return <>-</>;
-  }
-
-  return (
-    <span
-      title={intlFormat(
-        props.date,
-        {
-          dateStyle: "medium",
-          timeStyle: "medium",
-        },
-        { locale: "lt" },
-      )}
-    >
-      {intlFormatDistance(props.date, new Date(), {
-        locale: "lt",
-      })}
-    </span>
-  );
-};
-
 interface NodeDetailsProps {
   node: z.infer<typeof nodeSchema>;
 }
@@ -207,7 +185,7 @@ const NodeDetails = ({ node }: NodeDetailsProps) => {
       <div className="flex justify-between items-center">
         <span className="text-muted-foreground">Atnaujinta</span>
         <span>
-          <HumanReadableDuration date={node.lastUpdated} />
+          <DateUpdatedView date={node.lastUpdated} />
         </span>
       </div>
       <Button className="w-full" variant="outline" size="sm" asChild>
