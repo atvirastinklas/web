@@ -12,6 +12,7 @@ import {
   RadioIcon,
 } from "lucide-react";
 import type { EnvironmentMetrics } from "../contracts";
+import { DateUpdatedView } from "../temp-comps/date-updated-view";
 
 const metrics: Array<{
   key: keyof EnvironmentMetrics;
@@ -92,9 +93,11 @@ interface Props {
 
 export const EnvironmentMetricsSection = (props: Props) => {
   const metrics = getEnvironmentMetrics(props.data);
-  if (metrics == null || metrics.length === 0) {
+  if (props.data == null || metrics == null || metrics.length === 0) {
     return null;
   }
+
+  const lastUpdated = new Date(props.data.lastUpdated);
 
   return (
     <div className="space-y-4">
@@ -126,6 +129,12 @@ export const EnvironmentMetricsSection = (props: Props) => {
             </div>
           );
         })}
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-muted-foreground">Atnaujinta</span>
+          <span className="text-sm">
+            <DateUpdatedView date={lastUpdated} />
+          </span>
+        </div>
       </div>
     </div>
   );

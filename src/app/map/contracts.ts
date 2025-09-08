@@ -56,4 +56,5 @@ export interface EnvironmentMetrics {
   rainfall24h: number | null;
   soilMoisture: number | null;
   soilTemperature: number | null;
+  lastUpdated: string;
 }
