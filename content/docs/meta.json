@@ -1,0 +1,10 @@
+{
+	"root": true,
+	"pages": [
+		"---Pradžia---",
+		"index",
+		"---Žemėlapis---",
+		"zemelapis/buti-matomas-zemelapyje",
+		"zemelapis/dalintis-tinklo-duomenimis"
+	]
+}
