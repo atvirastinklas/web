@@ -28,18 +28,21 @@ Jeigu norite būti matomas Atviro Tinklo žemėlapyje, įsitikinkite, kad jūsų
 Visi įrenginiai pagal nutylėjimą turi **pagrindinį kanalą**, kuris yra atviras ir naudoja viešai žinomą šifravimo raktą.  
 Per šį kanalą keliauja visa jūsų įrenginio informacija - pavadinimas, lokacija, baterijos būsena, jutiklių duomenys ir kiti tinklui naudojami pranešimai.
 
-įsitikinkite, kad jūsų įrenginys naudoja šiuos pagrindinio kanalo nustatymus:
+Įsitikinkite, kad jūsų įrenginys naudoja šiuos pagrindinio kanalo nustatymus:
 
-| Kanalo nustatymas        | Reikšmė               |
-|--------------------------|-----------------------|
-| Name                     | *(tuščias)*           |
-| Channel Role             | Primary (Pagrindinis) |
-| Šifravimo raktas (PSK)   | `AQ==`                |
-| Pozicijos dalinimasis    | `Įjungtas`            |
-| Pozicijos tikslumas      | `700m` arba daugiau   |
+| Kanalo nustatymas        | Reikšmė                     |
+|--------------------------|-----------------------------|
+| Name                     | *(tuščias)* arba `LongFast` |
+| Channel Role             | Primary (Pagrindinis)       |
+| Šifravimo raktas (PSK)   | `AQ==`                      |
+| Pozicijos dalinimasis    | Įjungtas                    |
+| Pozicijos tikslumas      | 700 m arba daugiau          |
 
-<Callout title="Svarbu - kanalo pavadinimas turi būti tuščias" type="info">
-  Kanalo pavadinimas Meshtastic&reg; tinkle naudojamas techniniams tikslams, todėl jis privalo būti vienodas visiems įrenginiams. Jei pavadinimai skirsis, ryšys su kitais dalyviais neveiks.
+<Callout title="Svarbu - kanalo pavadinimas" type="info">
+  Kanalo pavadinimas Meshtastic® tinkle naudojamas techniniams tikslams.  
+  Jei jūsų programėlė leidžia - palikite jį tuščią.  
+  Jei pavadinimas yra privalomas, naudokite `LongFast`.  
+  Visuose įrenginiuose jis turi būti vienodas, kitaip ryšys su kitais neveiks.
 </Callout>
 
 [Daugiau apie kanalų nustatymus rasite oficialioje dokumentacijoje](https://meshtastic.org/docs/configuration/radio/channels/#channel-config-client-availability).
@@ -83,3 +86,11 @@ Jei po atliktų žingsnių jūsų įrenginys per valandą nepasirodė žemėlapy
 Tai galite atlikti patys - sekite [instrukcijas šiame puslapyje](/docs/atviro-tinklo-zemelapio-duomenys/siusti-duomenis-i-mqtt).
 </Step>
 </Steps>
+
+### Kaip būti pašalintam iš žemėlapio
+
+Norėdami nebebūti rodomi Atviro Tinklo žemėlapyje, išjunkite `OK to MQTT` nustatymą savo įrenginyje.  
+Išjungus šį nustatymą, įrenginio duomenys nebebus perduodami į MQTT serverį ir jis dings iš žemėlapio.
+
+Jeigu turite kitų klausimų, susijusių su privatumu, kreipkitės el. paštu **privatumas@atvirastinklas.lt**.
+
