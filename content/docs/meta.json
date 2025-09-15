@@ -5,6 +5,8 @@
 		"index",
 		"---Žemėlapis---",
 		"zemelapis/buti-matomas-zemelapyje",
-		"zemelapis/dalintis-tinklo-duomenimis"
+		"zemelapis/dalintis-tinklo-duomenimis",
+		"---Tinklo funkcijos---",
+		"funkcijos/ping-pong.mdx"
 	]
 }

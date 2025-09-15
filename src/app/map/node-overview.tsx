@@ -60,7 +60,7 @@ export default async function NodeOverview(props: Props) {
       <div className="space-y-6">
         {nodeData.info == null ? (
           <NodeHeader
-            title={`Nežinomas node: ${nodeData.nodeNum}`}
+            title={`Nežinomas mazgas: ${nodeData.nodeNum}`}
             avatarText={nodeNumToId(nodeData.nodeNum)}
             isUnmessagable={false}
           />
@@ -79,7 +79,7 @@ export default async function NodeOverview(props: Props) {
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
                 <UserIcon className="h-4 w-4" />
-                Node informacija
+                Mazgo informacija
               </h3>
               <div className="space-y-4">
                 <div className="space-y-3 pl-6">
@@ -99,14 +99,14 @@ export default async function NodeOverview(props: Props) {
               </div>
               <div className="space-y-3 pl-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Node ID</span>
+                  <span className="text-sm text-muted-foreground">Mazgo ID</span>
                   <code className="text-sm bg-muted px-2 py-1 rounded">
                     {nodeData.info.nodeId}
                   </code>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
-                    Node numeris
+                    Mazgo numeris
                   </span>
                   <span className="text-sm font-mono">{nodeData.nodeNum}</span>
                 </div>
