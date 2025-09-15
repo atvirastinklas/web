@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent } from "../ui/card";
 import { nodeNumToId } from "@/utils/meshtastic";
-import { SquareArrowOutUpRightIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface MeshNode {
   nodeNum: number;
@@ -84,7 +84,7 @@ export const NodeCard = async ({ nodeNumber }: Props) => {
                   .join(" • ")}
               </p>
             </div>
-            <SquareArrowOutUpRightIcon className="ml-2 w-4 h-4" />
+            <ChevronRight />
           </div>
         </CardContent>
       </Card>
