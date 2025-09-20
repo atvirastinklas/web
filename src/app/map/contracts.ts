@@ -1,60 +1,81 @@
-export interface MeshNode {
-  nodeNum: number;
-  info: {
-    nodeNum: undefined;
-    nodeId: string;
-    longName: string;
-    shortName: string;
-    hwModel: string;
-    isLicensed: boolean;
-    isUnmessagable: boolean;
-    role: string;
-    publicKey: string;
-    lastUpdated: Date;
-    updatedBy: string | null;
-  } | null;
-  positionPartial: {
-    nodeNum: undefined;
-    latitude: number;
-    longitude: number;
-    altitude: number | null;
-    accuracy: number;
-    lastUpdated: Date;
-    updatedBy: string | null;
-  } | null;
-  deviceMetrics: {
-    nodeNum: undefined;
-    batteryLevel: number | null;
-    voltage: number | null;
-    channelUtilization: number | null;
-    airUtilTx: number | null;
-    uptimeSeconds: number | null;
-    lastUpdated: Date;
-    updatedBy: string | null;
-  } | null;
-  environmentMetrics: EnvironmentMetrics | null;
+export interface MeshNodeInfo {
+  longName: string;
+  shortName: string;
+  hwModel: string;
+  isLicensed: boolean;
+  isUnmessagable: boolean;
+  role: string;
+  lastHeardAt: Date;
 }
 
-export interface EnvironmentMetrics {
-  temperature: number | null;
-  relativeHumidity: number | null;
-  barometricPressure: number | null;
-  gasResistance: number | null;
-  iaq: number | null;
-  distance: number | null;
-  lux: number | null;
-  whiteLux: number | null;
-  irLux: number | null;
-  uvLux: number | null;
-  windDirection: number | null;
-  windSpeed: number | null;
-  weight: number | null;
-  windGust: number | null;
-  windLull: number | null;
-  radiation: number | null;
-  rainfall1h: number | null;
-  rainfall24h: number | null;
-  soilMoisture: number | null;
-  soilTemperature: number | null;
-  lastUpdated: string;
+export interface MeshNodePosition {
+  latitude: number;
+  longitude: number;
+  altitude: number | null;
+  accuracy: number;
+  lastHeardAt: Date;
 }
+
+export interface MeshNodeMetric {
+  group: (typeof metricGroupType)[number];
+  metric: (typeof metricType)[number];
+  value: number | null;
+  createdAt: Date;
+}
+
+export interface MeshNodePublicKey {
+  publicKey: string;
+  createdAt: Date;
+}
+
+export interface MeshNode {
+  nodeNum: number;
+  createdAt: Date;
+  lastHeardAt: Date | null;
+  info: MeshNodeInfo | null;
+  position: MeshNodePosition | null;
+  metrics: MeshNodeMetric[];
+  publicKeys: MeshNodePublicKey[];
+}
+
+export const metricGroupType = ["device", "environment"] as const;
+
+export const deviceMetricType = [
+  "batteryLevel",
+  "voltage",
+  "channelUtilization",
+  "airUtilTx",
+  "uptimeSeconds",
+] as const;
+
+export const environmentMetricType = [
+  "temperature",
+  "relativeHumidity",
+  "barometricPressure",
+  "gasResistance",
+  // NOTE: To be depreciated in favor of PowerMetrics in Meshtastic 3.x
+  "voltage",
+  // NOTE: To be depreciated in favor of PowerMetrics in Meshtastic 3.x
+  "current",
+  "iaq",
+  "distance",
+  "lux",
+  "whiteLux",
+  "irLux",
+  "uvLux",
+  "windDirection",
+  "windSpeed",
+  "weight",
+  "windGust",
+  "windLull",
+  "radiation",
+  "rainfall1h",
+  "rainfall24h",
+  "soilMoisture",
+  "soilTemperature",
+] as const;
+
+export const metricType = [
+  ...deviceMetricType,
+  ...environmentMetricType,
+] as const;

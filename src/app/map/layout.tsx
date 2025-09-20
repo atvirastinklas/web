@@ -13,7 +13,24 @@ export default function Layout({ children }: Props) {
   return (
     <SearchProvider SearchDialog={DefaultSearchDialog}>
       <div className="flex flex-col min-h-screen">
-        <Header {...baseOptions} searchToggle={{ enabled: true }} />
+        <Header
+          {...baseOptions}
+          searchToggle={{ enabled: true }}
+          links={[
+            {
+              type: "main",
+              text: "Žinynas",
+              url: "/docs",
+              on: "all",
+            },
+            {
+              type: "main",
+              text: "Privatumo Politika",
+              url: "/privatumo-politika",
+              on: "all",
+            },
+          ]}
+        />
         <div className="pt-14 flex-grow">
           <div className="flex h-full w-full">{children}</div>
         </div>

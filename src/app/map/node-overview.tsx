@@ -6,29 +6,20 @@ import {
   ChartSplineIcon,
   MapPinIcon,
   MessageCircleOff,
+  ThermometerIcon,
   UserIcon,
   XIcon,
 } from "lucide-react";
 import type { MeshNode } from "./contracts";
-import { formatDuration, intervalToDuration } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DateUpdatedView } from "./temp-comps/date-updated-view";
-import { lt } from "date-fns/locale";
 import { nodeNumToId } from "@/utils/meshtastic";
-import { EnvironmentMetricsSection } from "./node-overview/environment-metrics-section";
+import { MetricsSection } from "./node-overview/metrics-section";
 import { GoToMapButton } from "./node-overview/go-to-map-button";
 
 const formatAccuracy = (accuracy: number) => {
   return `${Math.round(accuracy)}m`;
-};
-
-const formatUptime = (seconds: number) => {
-  const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
-  return formatDuration(duration, {
-    format: ["days", "hours", "minutes"],
-    locale: lt,
-  });
 };
 
 interface Props {
@@ -37,15 +28,39 @@ interface Props {
 
 export default async function NodeOverview(props: Props) {
   const { node } = props;
-  const response = await fetch(`https://api.atvirastinklas.lt/node/${node}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const response = await fetch(
+    `https://api.atvirastinklas.lt/node/${node}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
   if (!response.ok) {
     notFound();
   }
 
   const nodeData = (await response.json()) as MeshNode;
+
+  const takeFirstPerMetric = <T extends { metric: string }>(
+    metrics: T[],
+  ): T[] => {
+    const seen = new Set<string>();
+    const result: T[] = [];
+    for (const m of metrics) {
+      if (!seen.has(m.metric)) {
+        seen.add(m.metric);
+        result.push(m);
+      }
+    }
+    return result;
+  };
+
+  const deviceMetrics = takeFirstPerMetric(
+    nodeData.metrics?.filter((m) => m.group === "device") ?? [],
+  );
+  const envMetrics = takeFirstPerMetric(
+    nodeData.metrics?.filter((m) => m.group === "environment") ?? [],
+  );
 
   return (
     <div className="min-w-screen sm:min-w-full lg:min-w-lg h-full bg-card border-l border-border p-6 overflow-y-auto relative">
@@ -99,16 +114,20 @@ export default async function NodeOverview(props: Props) {
               </div>
               <div className="space-y-3 pl-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Mazgo ID</span>
+                  <span className="text-sm text-muted-foreground">
+                    Mazgo numeris
+                  </span>
                   <code className="text-sm bg-muted px-2 py-1 rounded">
-                    {nodeData.info.nodeId}
+                    {nodeData.nodeNum}
                   </code>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
-                    Mazgo numeris
+                    Mazgo ID
                   </span>
-                  <span className="text-sm font-mono">{nodeData.nodeNum}</span>
+                  <code className="text-sm bg-muted px-2 py-1 rounded">
+                    {nodeNumToId(nodeData.nodeNum)}
+                  </code>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
@@ -120,20 +139,22 @@ export default async function NodeOverview(props: Props) {
                     {nodeData.info.isLicensed ? "Taip" : "Ne"}
                   </Badge>
                 </div>
-                <div className="space-y-2">
-                  <span className="text-sm text-muted-foreground">
-                    Viešas raktas (Public Key)
-                  </span>
-                  <div className="bg-muted p-2 rounded text-xs font-mono break-all">
-                    {nodeData.info.publicKey}
+                {nodeData.publicKeys.length === 0 ? null : (
+                  <div className="space-y-2">
+                    <span className="text-sm text-muted-foreground">
+                      Viešas raktas (Public Key)
+                    </span>
+                    <div className="bg-muted p-2 rounded text-xs font-mono break-all">
+                      {nodeData.publicKeys[0].publicKey}
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">
                     Atnaujinta
                   </span>
                   <span className="text-sm">
-                    <DateUpdatedView date={nodeData.info.lastUpdated} />
+                    <DateUpdatedView date={nodeData.info.lastHeardAt} />
                   </span>
                 </div>
               </div>
@@ -141,72 +162,7 @@ export default async function NodeOverview(props: Props) {
             <Separator />
           </>
         )}
-        {nodeData.deviceMetrics == null ? null : (
-          <>
-            <div className="space-y-4">
-              <h3 className="flex items-center gap-2 text-base font-medium">
-                <ChartSplineIcon className="h-4 w-4" />
-                Įrenginio rodikliai
-              </h3>
-              <div className="space-y-3 pl-6">
-                <HorizontalStat
-                  label="Baterijos lygis"
-                  value={nodeData.deviceMetrics.batteryLevel}
-                >
-                  {(value) => (
-                    <Badge variant={value > 50 ? "default" : "destructive"}>
-                      {value}%
-                    </Badge>
-                  )}
-                </HorizontalStat>
-                <HorizontalStat
-                  label="Įtampa"
-                  value={nodeData.deviceMetrics.voltage}
-                >
-                  {(value) => (
-                    <span className="font-mono">{value.toFixed(2)}V</span>
-                  )}
-                </HorizontalStat>
-                <HorizontalStat
-                  label="Kanalo apkrova"
-                  value={nodeData.deviceMetrics.channelUtilization}
-                >
-                  {(value) => (
-                    <span className="font-mono">{`${value.toFixed(2)}%`}</span>
-                  )}
-                </HorizontalStat>
-                <HorizontalStat
-                  label="Eterio apkrova (TX)"
-                  value={nodeData.deviceMetrics.airUtilTx}
-                >
-                  {(value) => (
-                    <span className="font-mono">{`${value.toFixed(2)}%`}</span>
-                  )}
-                </HorizontalStat>
-                <HorizontalStat
-                  label="Veikimo laikas"
-                  value={nodeData.deviceMetrics.uptimeSeconds}
-                >
-                  {(value) => (
-                    <span className="text-sm">{formatUptime(value)}</span>
-                  )}
-                </HorizontalStat>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">
-                    Atnaujinta
-                  </span>
-                  <span className="text-sm">
-                    <DateUpdatedView
-                      date={nodeData.deviceMetrics.lastUpdated}
-                    />
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Separator />
-          </>
-        )}
-        {nodeData.positionPartial == null ? null : (
+        {nodeData.position == null ? null : (
           <>
             <div className="space-y-4">
               <h3 className="flex items-center gap-2 text-base font-medium">
@@ -219,17 +175,16 @@ export default async function NodeOverview(props: Props) {
                     Koordinatės
                   </span>
                   <code className="text-sm bg-muted px-2 py-1 rounded">
-                    {nodeData.positionPartial.latitude},{" "}
-                    {nodeData.positionPartial.longitude}
+                    {nodeData.position.latitude}, {nodeData.position.longitude}
                   </code>
                 </div>
-                {nodeData.positionPartial.accuracy == null ? null : (
+                {nodeData.position.accuracy == null ? null : (
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
                       Tikslumas
                     </span>
                     <Badge variant="outline">
-                      {formatAccuracy(nodeData.positionPartial.accuracy)}
+                      {formatAccuracy(nodeData.position.accuracy)}
                     </Badge>
                   </div>
                 )}
@@ -238,9 +193,7 @@ export default async function NodeOverview(props: Props) {
                     Atnaujinta
                   </span>
                   <span className="text-sm">
-                    <DateUpdatedView
-                      date={nodeData.positionPartial.lastUpdated}
-                    />
+                    <DateUpdatedView date={nodeData.position.lastHeardAt} />
                   </span>
                 </div>
               </div>
@@ -248,7 +201,25 @@ export default async function NodeOverview(props: Props) {
             <Separator />
           </>
         )}
-        <EnvironmentMetricsSection data={nodeData.environmentMetrics} />
+        {deviceMetrics.length === 0 ? null : (
+          <>
+            <MetricsSection
+              icon={ChartSplineIcon}
+              title="Įrenginio rodikliai"
+              metrics={deviceMetrics}
+            />
+            <Separator />
+          </>
+        )}
+        {envMetrics.length === 0 ? null : (
+          <>
+            <MetricsSection
+              icon={ThermometerIcon}
+              title="Aplinkos matavimai"
+              metrics={envMetrics}
+            />
+          </>
+        )}
       </div>
     </div>
   );

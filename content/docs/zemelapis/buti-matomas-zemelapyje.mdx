@@ -68,17 +68,6 @@ Kad įrenginys galėtų dalintis vieta, jis pirmiausia turi ją žinoti.
 [Pozicijos nustatymai oficialioje dokumentacijoje](https://meshtastic.org/docs/configuration/radio/position).
 </Step>
 <Step>
-### Įjunkite „OK to MQTT“
-
-Kai jūsų įrenginys dalinasi lokacija per pagrindinį kanalą, reikia leisti, kad ši informacija būtų perduodama į MQTT serverį.
-
-Tai padarysite „LoRa“ nustatymuose įjungę parametrą [„OK to MQTT“](https://meshtastic.org/docs/configuration/radio/lora/#ok-to-mqtt).
-
-<Callout title="Svarbu - tai tik prašymas" type="warning">
-  „OK to MQTT“ yra tik mandagus leidimas. Net jei šį nustatymą išjungsite, kiti kanalo klausytojai vis tiek techniškai gali matyti jūsų lokaciją ir ją perduoti.
-</Callout>
-</Step>
-<Step>
 ### Užtikrinkite duomenų siuntimą į MQTT
 
 Jei po atliktų žingsnių jūsų įrenginys per valandą nepasirodė žemėlapyje, gali būti, kad netoliese nėra mazgų, kurie siunčia pagrindinio kanalo duomenis į MQTT serverį.
@@ -89,8 +78,5 @@ Tai galite atlikti patys - sekite [instrukcijas šiame puslapyje](/docs/atviro-t
 
 ### Kaip būti pašalintam iš žemėlapio
 
-Norėdami nebebūti rodomi Atviro Tinklo žemėlapyje, išjunkite `OK to MQTT` nustatymą savo įrenginyje.  
-Išjungus šį nustatymą, įrenginio duomenys nebebus perduodami į MQTT serverį ir jis dings iš žemėlapio.
-
-Jeigu turite kitų klausimų, susijusių su privatumu, kreipkitės el. paštu **privatumas@atvirastinklas.lt**.
+Norėdami nebebūti rodomi Atviro Tinklo žemėlapyje kreipkitės el. paštu **privatumas@atvirastinklas.lt**.
 

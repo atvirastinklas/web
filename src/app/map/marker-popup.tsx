@@ -1,26 +1,22 @@
 import { useEffect, useState } from "react";
-import { Point, Popup, useMap } from "react-map-gl/maplibre";
+import { Popup, useMap } from "react-map-gl/maplibre";
 import { z } from "zod";
-import { getClusterLeaves } from "./utils";
+import { getClusterLeaves, nodeNumToId } from "./utils";
 import type { Position } from "geojson";
 import { XIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { formatDate } from "date-fns/format";
 import { Badge } from "@/components/ui/badge";
-import { intlFormat, intlFormatDistance } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { MarkerPrecisionCircle } from "./marker-precision-circle";
 import { DateUpdatedView } from "./temp-comps/date-updated-view";
 
 const nodeSchema = z.object({
   nodeNum: z.number(),
-  nodeId: z.string(),
   longName: z.string(),
   shortName: z.string(),
   accuracy: z.number().nullable(),
-  lastUpdated: z
+  lastHeardAt: z
     .string()
     .transform((val) => (val ? new Date(val) : null))
     .nullable(),
@@ -137,7 +133,7 @@ export const MarkerPopup = (props: Props) => {
         </Button>
         <div className="flex flex-col overflow-y-auto max-h-[180px] lg:max-h-[370px] p-4">
           {nodes.items.map((node, idx) => (
-            <div key={node.nodeId}>
+            <div key={node.nodeNum}>
               <NodeDetails node={node} />
               {idx < nodes.items.length - 1 && (
                 <div className="py-2">
@@ -179,13 +175,13 @@ const NodeDetails = ({ node }: NodeDetailsProps) => {
       <div className="flex justify-between items-center">
         <span className="text-muted-foreground">Node ID</span>
         <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
-          {node.nodeId}
+          {nodeNumToId(node.nodeNum)}
         </code>
       </div>
       <div className="flex justify-between items-center">
         <span className="text-muted-foreground">Atnaujinta</span>
         <span>
-          <DateUpdatedView date={node.lastUpdated} />
+          <DateUpdatedView date={node.lastHeardAt} />
         </span>
       </div>
       <Button className="w-full" variant="outline" size="sm" asChild>
