@@ -89,45 +89,51 @@ export const MeshMap = (props: Props) => {
   const { theme } = useTheme();
 
   return (
-    <>
-      <MapComp
-        initialViewState={{
-          bounds: [21.0558004086, 53.9057022162, 26.5882792498, 56.3725283881],
-          fitBoundsOptions: { padding: 40 },
-        }}
-        mapStyle={mapStyle(theme)}
-      >
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
-        <MarkerPopup
-          sourceId="nodes"
-          layers={["unclustered-nodes", "clusters"]}
-        />
-        <ActiveNode sourceId="nodes" nodeNum={props.nodeNum} />
-        {props.nodeNum == null ? null : (
-          <OverviewButton
-            currentView={props.viewMode}
-            className="absolute top-4 right-4 z-10 gap-2"
-          />
-        )}
-        <Source
-          id="nodes"
-          type="geojson"
-          data="https://api.atvirastinklas.lt/map/nodes.json"
-          cluster={true}
-          clusterMaxZoom={18}
-          maxzoom={20}
-          clusterRadius={25}
+    <div className="flex w-full h-full">
+      <div className="flex-1 h-full">
+        <MapComp
+          initialViewState={{
+            bounds: [
+              21.0558004086, 53.9057022162, 26.5882792498, 56.3725283881,
+            ],
+            fitBoundsOptions: { padding: 40 },
+          }}
+          mapStyle={mapStyle(theme)}
         >
-          <Layer {...clusterLayer} />
-          <Layer {...clusterCountLayer} />
-          <Layer {...unclusteredNodeLayer} />
-          <Layer {...unclusteredNodeLabelLayer} />
-        </Source>
-      </MapComp>
-      {props.viewMode === "map" ? null : props.nodeOverview}
-    </>
+          <GeolocateControl position="top-left" />
+          <FullscreenControl position="top-left" />
+          <NavigationControl position="top-left" />
+          <MarkerPopup
+            sourceId="nodes"
+            layers={["unclustered-nodes", "clusters"]}
+          />
+          <ActiveNode sourceId="nodes" nodeNum={props.nodeNum} />
+          {props.nodeNum == null ? null : (
+            <OverviewButton
+              currentView={props.viewMode}
+              className="absolute top-4 right-4 z-10 gap-2"
+            />
+          )}
+          <Source
+            id="nodes"
+            type="geojson"
+            data="https://api.atvirastinklas.lt/map/nodes.json"
+            cluster={true}
+            clusterMaxZoom={18}
+            maxzoom={20}
+            clusterRadius={25}
+          >
+            <Layer {...clusterLayer} />
+            <Layer {...clusterCountLayer} />
+            <Layer {...unclusteredNodeLayer} />
+            <Layer {...unclusteredNodeLabelLayer} />
+          </Source>
+        </MapComp>
+      </div>
+      {props.viewMode === "map" ? null : (
+        <div className="h-full overflow-y-auto">{props.nodeOverview}</div>
+      )}
+    </div>
   );
 };
 

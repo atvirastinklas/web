@@ -12,7 +12,7 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <SearchProvider SearchDialog={DefaultSearchDialog}>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col h-screen overflow-hidden">
         <Header
           {...baseOptions}
           searchToggle={{ enabled: true }}
@@ -31,8 +31,8 @@ export default function Layout({ children }: Props) {
             },
           ]}
         />
-        <div className="pt-14 flex-grow">
-          <div className="flex h-full w-full">{children}</div>
+        <div className="pt-14 flex-grow overflow-hidden">
+          <div className="flex h-full w-full overflow-hidden">{children}</div>
         </div>
       </div>
     </SearchProvider>
