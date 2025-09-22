@@ -31,6 +31,10 @@ export const NodeCard = async ({ nodeNumber }: Props) => {
 
   // TODO: Handle 404.
 
+  if (!data.ok) {
+    return null;
+  }
+
   const nodeData = (await data.json()) as MeshNode;
 
   const nodeInfo =
