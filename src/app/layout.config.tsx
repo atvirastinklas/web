@@ -1,10 +1,9 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
-import { SiFacebook } from "@icons-pack/react-simple-icons";
 
 export const baseOptions = {
-  githubUrl: `https://github.com/${
-    process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ""
-  }/${process.env.NEXT_PUBLIC_GITHUB_REPO ?? ""}`,
+  // githubUrl: `https://github.com/${
+  //   process.env.NEXT_PUBLIC_GITHUB_OWNER ?? ""
+  // }/${process.env.NEXT_PUBLIC_GITHUB_REPO ?? ""}`,
   nav: {
     title: (
       <>
@@ -23,12 +22,30 @@ export const baseOptions = {
   },
   // see https://fumadocs.dev/docs/ui/navigation/links
   links: [
+    // {
+    //   type: "icon",
+    //   icon: <SiFacebook />,
+    //   label: "Facebook Grupė",
+    //   text: "Facebook Grupė",
+    //   url: "https://www.facebook.com/groups/1122509422249414",
+    // },
     {
-      type: "icon",
-      icon: <SiFacebook />,
-      label: "Facebook Grupė",
-      text: "Facebook Grupė",
-      url: "https://www.facebook.com/groups/1122509422249414",
+      type: "main",
+      text: "Žemėlapis",
+      url: "/map",
+      on: "all",
     },
+    {
+      type: "main",
+      text: "Žinynas",
+      url: "https://atvirastinklas.lt/zinynas/meshtastic",
+      on: "all",
+    },
+    {
+      type: "main",
+      text: "Privatumo Politika",
+      url: "/privatumo-politika",
+      on: "all",
+    }
   ],
 } satisfies BaseLayoutProps;

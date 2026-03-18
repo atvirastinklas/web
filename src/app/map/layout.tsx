@@ -16,20 +16,7 @@ export default function Layout({ children }: Props) {
         <Header
           {...baseOptions}
           searchToggle={{ enabled: true }}
-          links={[
-            {
-              type: "main",
-              text: "Žinynas",
-              url: "/docs",
-              on: "all",
-            },
-            {
-              type: "main",
-              text: "Privatumo Politika",
-              url: "/privatumo-politika",
-              on: "all",
-            },
-          ]}
+          links={baseOptions.links}
         />
         <div className="pt-14 flex-grow overflow-hidden">
           <div className="flex h-full w-full overflow-hidden">{children}</div>

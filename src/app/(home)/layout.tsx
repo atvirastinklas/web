@@ -8,18 +8,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       {...baseOptions}
       links={[
         ...baseOptions.links,
-        {
-          type: "main",
-          text: "Žinynas",
-          url: "/docs",
-          on: "all",
-        },
-        {
-          type: "main",
-          text: "Žemėlapis",
-          url: "/map",
-          on: "all",
-        },
       ]}
     >
       {children}

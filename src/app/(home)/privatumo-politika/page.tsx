@@ -13,7 +13,7 @@ export default async function Page() {
   const MDXContent = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <div className="max-w-screen-md mx-auto py-12">
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsBody>
         <MDXContent
@@ -23,7 +23,7 @@ export default async function Page() {
           })}
         />
       </DocsBody>
-    </DocsPage>
+    </div>
   );
 }
 
